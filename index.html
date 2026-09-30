@@ -210,12 +210,45 @@
             background: #faf9f5;
             overflow: hidden;
             cursor: crosshair;
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
 
         canvas#viewport {
             width: 100%;
             height: 100%;
             display: block;
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        .nudge-btn {
+            background: #1c2230;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f1f5f9;
+            border-radius: 8px;
+            width: 48px;
+            height: 42px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+            transition: all 0.12s ease;
+        }
+        .nudge-btn:hover {
+            background: #2a3449;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .nudge-btn:active {
+            background: var(--accent);
+            transform: scale(0.92);
         }
 
         /* Overlay pills */
@@ -1059,7 +1092,23 @@
                     <!-- Dynamic joint list items inserted by JS -->
                 </div>
 
-                <div class="toggle-row" style="margin-top: 6px;">
+                <!-- Nudge Buttons for mobile touch precision -->
+                <div id="jointNudgeBox" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px; margin-top: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11px;">
+                        <span>📱 <strong>Geser Presisi Sendi:</strong> <span id="nudgeJointName" style="color: var(--accent); font-weight: bold;">(Ketuk sendi untuk pilih)</span></span>
+                        <span style="font-size: 10px; color: #64748b;">Tombol Arah HP</span>
+                    </div>
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
+                        <button id="nudgeLeftBtn" class="nudge-btn" title="Geser Kiri (Left)">⬅️</button>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <button id="nudgeUpBtn" class="nudge-btn" title="Geser Atas (Up)">⬆️</button>
+                            <button id="nudgeDownBtn" class="nudge-btn" title="Geser Bawah (Down)">⬇️</button>
+                        </div>
+                        <button id="nudgeRightBtn" class="nudge-btn" title="Geser Kanan (Right)">➡️</button>
+                    </div>
+                </div>
+
+                <div class="toggle-row" style="margin-top: 8px;">
                     <label for="showBonesCheckbox">Tampilkan Garis Tulang & Label</label>
                     <input type="checkbox" id="showBonesCheckbox" checked>
                 </div>
@@ -2100,8 +2149,21 @@
                     targetCtx.strokeStyle = '#f59e0b';
                     targetCtx.lineWidth = 3;
                     targetCtx.beginPath();
-                    targetCtx.arc(target.x, target.y, isSelected ? 14 : 12, 0, Math.PI * 2);
+                    targetCtx.arc(target.x, target.y, isSelected ? 16 : 13, 0, Math.PI * 2);
                     targetCtx.stroke();
+                }
+
+                // Touch feedback ring when dragging so finger doesn't obscure the joint on mobile!
+                if (isSelected && isDraggingPin) {
+                    targetCtx.save();
+                    targetCtx.strokeStyle = 'rgba(239, 68, 68, 0.75)';
+                    targetCtx.fillStyle = 'rgba(239, 68, 68, 0.22)';
+                    targetCtx.lineWidth = 2.5;
+                    targetCtx.beginPath();
+                    targetCtx.arc(target.x, target.y, 25, 0, Math.PI * 2);
+                    targetCtx.fill();
+                    targetCtx.stroke();
+                    targetCtx.restore();
                 }
 
                 targetCtx.fillStyle = isSelected ? '#ef4444' : (pin.isAnchor ? '#f59e0b' : '#facc15');
@@ -2109,7 +2171,7 @@
                 targetCtx.lineWidth = 2.5;
 
                 targetCtx.beginPath();
-                targetCtx.arc(target.x, target.y, isSelected ? 10 : 7.5, 0, Math.PI * 2);
+                targetCtx.arc(target.x, target.y, isSelected ? 12 : 9, 0, Math.PI * 2);
                 targetCtx.fill();
                 targetCtx.stroke();
 
@@ -2179,10 +2241,24 @@
         // ==========================================
         // 6. INTERACTION & PIN DRAGGING FOR LAYER
         // ==========================================
-        function getCanvasMousePos(e) {
+        function getCanvasPointerPos(e) {
             const rect = canvas.getBoundingClientRect();
-            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+
+            // Extract touch coordinates if clientX is not set directly
+            if ((clientX === undefined || isNaN(clientX)) && e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else if ((clientX === undefined || isNaN(clientX)) && e.changedTouches && e.changedTouches.length > 0) {
+                clientX = e.changedTouches[0].clientX;
+                clientY = e.changedTouches[0].clientY;
+            }
+
+            if (clientX === undefined || isNaN(clientX)) {
+                return { x: 0, y: 0 };
+            }
+
             const scaleX = canvas.width / rect.width;
             const scaleY = canvas.height / rect.height;
             return {
@@ -2191,7 +2267,11 @@
             };
         }
 
-        function findPinNearInActiveLayer(stageX, stageY) {
+        function isTouchEvent(e) {
+            return (e.pointerType === 'touch' || e.pointerType === 'pen' || (e.type && e.type.startsWith('touch')) || ('ontouchstart' in window && e.pointerType !== 'mouse'));
+        }
+
+        function findPinNearInActiveLayer(stageX, stageY, isTouch = false) {
             const activeLayer = getActiveLayer();
             if (!activeLayer || !activeLayer.visible || !activeLayer.imageLoaded) return -1;
 
@@ -2203,22 +2283,42 @@
             const drawW = activeLayer.processedCanvas.width * baseScale * activeLayer.scale;
             const drawH = activeLayer.processedCanvas.height * baseScale * activeLayer.scale;
 
+            const pinTargets = getAnimatedPinTargetsForLayer(activeLayer, drawW, drawH);
+
+            // Responsive touch threshold:
+            // Desktop mouse: 45px radius
+            // HP/Touch: 95px radius (generous ~32-40 physical screen px for fingertip contact)
+            const maxThreshold = isTouch ? 95 : 45;
+            let closestIndex = -1;
+            let closestDist = Infinity;
+
             for (let i = 0; i < activeLayer.skeletonPins.length; i++) {
                 const pin = activeLayer.skeletonPins[i];
-                const px = (pin.u - 0.5) * drawW;
-                const py = (pin.v - 0.5) * drawH;
+                let px = (pin.u - 0.5) * drawW;
+                let py = (pin.v - 0.5) * drawH;
+                if (pinTargets && pinTargets[i]) {
+                    px = pinTargets[i].x;
+                    py = pinTargets[i].y;
+                }
                 const dist = Math.hypot(localX - px, localY - py);
-                if (dist <= 24) return i;
+                if (dist <= maxThreshold && dist < closestDist) {
+                    closestDist = dist;
+                    closestIndex = i;
+                }
             }
-            return -1;
+            return closestIndex;
         }
 
-        canvas.addEventListener('mousedown', (e) => {
-            const pos = getCanvasMousePos(e);
+        let activePointerId = null;
+
+        function onPointerStart(e) {
+            const touch = isTouchEvent(e);
+            const pos = getCanvasPointerPos(e);
             const activeLayer = getActiveLayer();
             if (!activeLayer) return;
 
             if (isAddingPin) {
+                if (e.cancelable) e.preventDefault();
                 let localX = pos.x - activeLayer.posX;
                 if (activeLayer.flipH) localX = -localX;
                 let localY = pos.y - activeLayer.posY;
@@ -2251,21 +2351,36 @@
                 return;
             }
 
-            const hitIndex = findPinNearInActiveLayer(pos.x, pos.y);
+            const hitIndex = findPinNearInActiveLayer(pos.x, pos.y, touch);
             if (hitIndex !== -1) {
+                if (e.cancelable) e.preventDefault();
                 activeLayer.selectedPinIndex = hitIndex;
                 isDraggingPin = true;
+                activePointerId = (e.pointerId !== undefined) ? e.pointerId : null;
+
+                if (e.target && e.target.setPointerCapture && activePointerId !== null) {
+                    try {
+                        e.target.setPointerCapture(activePointerId);
+                    } catch (err) {}
+                }
+
+                if (touch && navigator.vibrate) {
+                    try { navigator.vibrate(15); } catch (err) {}
+                }
+
                 updateJointListUI();
                 drawStage();
             }
-        });
+        }
 
-        window.addEventListener('mousemove', (e) => {
+        function onPointerMove(e) {
             if (!isDraggingPin) return;
             const activeLayer = getActiveLayer();
             if (!activeLayer || activeLayer.selectedPinIndex === -1) return;
 
-            const pos = getCanvasMousePos(e);
+            if (e.cancelable) e.preventDefault();
+
+            const pos = getCanvasPointerPos(e);
             let localX = pos.x - activeLayer.posX;
             if (activeLayer.flipH) localX = -localX;
             let localY = pos.y - activeLayer.posY;
@@ -2281,10 +2396,43 @@
             activeLayer.skeletonPins[activeLayer.selectedPinIndex].v = v;
 
             drawStage();
-        });
+        }
 
-        window.addEventListener('mouseup', () => {
-            isDraggingPin = false;
+        function onPointerEnd(e) {
+            if (isDraggingPin) {
+                isDraggingPin = false;
+                if (activePointerId !== null && canvas.releasePointerCapture) {
+                    try {
+                        canvas.releasePointerCapture(activePointerId);
+                    } catch (err) {}
+                }
+                activePointerId = null;
+                drawStage();
+            }
+        }
+
+        // Standard Pointer Events (Chrome, Safari iOS 13+, Edge, Firefox)
+        canvas.addEventListener('pointerdown', onPointerStart, { passive: false });
+        window.addEventListener('pointermove', onPointerMove, { passive: false });
+        window.addEventListener('pointerup', onPointerEnd);
+        window.addEventListener('pointercancel', onPointerEnd);
+
+        // Fallback Touch Events for older WebViews / Safari
+        canvas.addEventListener('touchstart', (e) => {
+            if (!window.PointerEvent) onPointerStart(e);
+            else if (isDraggingPin || isAddingPin) e.preventDefault();
+        }, { passive: false });
+        window.addEventListener('touchmove', (e) => {
+            if (isDraggingPin) {
+                e.preventDefault();
+                if (!window.PointerEvent) onPointerMove(e);
+            }
+        }, { passive: false });
+        window.addEventListener('touchend', (e) => {
+            if (!window.PointerEvent) onPointerEnd(e);
+        });
+        window.addEventListener('touchcancel', (e) => {
+            if (!window.PointerEvent) onPointerEnd(e);
         });
 
         // ==========================================
@@ -2531,6 +2679,17 @@
                 };
                 container.appendChild(item);
             });
+
+            const nudgeJointName = document.getElementById('nudgeJointName');
+            if (nudgeJointName) {
+                if (activeLayer.selectedPinIndex >= 0 && activeLayer.skeletonPins[activeLayer.selectedPinIndex]) {
+                    nudgeJointName.innerText = activeLayer.skeletonPins[activeLayer.selectedPinIndex].name;
+                    nudgeJointName.style.color = '#facc15';
+                } else {
+                    nudgeJointName.innerText = '(Ketuk sendi untuk pilih)';
+                    nudgeJointName.style.color = '#94a3b8';
+                }
+            }
         }
 
         // ==========================================
@@ -2848,6 +3007,38 @@
             showBones = e.target.checked;
             drawStage();
         };
+
+        // Joint Nudge D-Pad for Mobile & Precision
+        function nudgeSelectedPin(dx, dy) {
+            const activeLayer = getActiveLayer();
+            if (!activeLayer) return;
+            if (activeLayer.selectedPinIndex < 0 || !activeLayer.skeletonPins[activeLayer.selectedPinIndex]) {
+                activeLayer.selectedPinIndex = 0;
+                updateJointListUI();
+            }
+            const pin = activeLayer.skeletonPins[activeLayer.selectedPinIndex];
+            const step = 0.015;
+            const effectiveDx = activeLayer.flipH ? -dx : dx;
+
+            pin.u = Math.max(0, Math.min(1, pin.u + (effectiveDx * step)));
+            pin.v = Math.max(0, Math.min(1, pin.v + (dy * step)));
+
+            if (navigator.vibrate) {
+                try { navigator.vibrate(12); } catch (err) {}
+            }
+
+            drawStage();
+        }
+
+        const btnLeft = document.getElementById('nudgeLeftBtn');
+        const btnRight = document.getElementById('nudgeRightBtn');
+        const btnUp = document.getElementById('nudgeUpBtn');
+        const btnDown = document.getElementById('nudgeDownBtn');
+
+        if (btnLeft) btnLeft.onclick = () => nudgeSelectedPin(-1, 0);
+        if (btnRight) btnRight.onclick = () => nudgeSelectedPin(1, 0);
+        if (btnUp) btnUp.onclick = () => nudgeSelectedPin(0, -1);
+        if (btnDown) btnDown.onclick = () => nudgeSelectedPin(0, 1);
 
         // ==========================================
         // 10. UPLOAD HANDLER FOR ACTIVE LAYER
