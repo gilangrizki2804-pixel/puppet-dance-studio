@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Skeleton & Tari Karakter — Stop Motion</title>
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --panel-bg: rgba(18, 22, 31, 0.94);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --accent: #f59e0b;
+            --accent-hover: #d97706;
+            --accent-glow: rgba(245, 158, 11, 0.25);
+            --bone-color: #38bdf8;
+            --bone-glow: rgba(56, 189, 248, 0.4);
+            --joint-color: #facc15;
+            --joint-active: #ef4444;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --btn-bg: #1c2230;
+            --btn-hover: #293245;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 16px 40px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 14px;
+            max-width: 860px;
+        }
+
+        .badge-bar {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            padding: 3px 10px;
+            border-radius: 99px;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: #fbbf24;
+        }
+
+        .badge-bone {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: #38bdf8;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+            background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Top Notification Toast / Banner */
+        #notificationBanner {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-60px);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #notificationBanner.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        #notificationBanner.success { border-color: var(--success); color: #34d399; }
+        #notificationBanner.error { border-color: var(--danger); color: #f87171; }
+        #notificationBanner.info { border-color: var(--bone-color); color: #38bdf8; }
+
+        /* Top Mode Switcher */
+        .mode-switcher-container {
+            display: flex;
+            background: #141822;
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--panel-border);
+            gap: 6px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active.bone-tab {
+            background: #1e293b;
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+        }
+
+        .tab-btn.active.dance-tab {
+            background: #1e293b;
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+        }
+
+        /* Main Grid Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+            max-width: 1140px;
+            width: 100%;
+        }
+
+        @media (min-width: 960px) {
+            .main-layout {
+                grid-template-columns: 580px 1fr;
+                align-items: start;
+            }
+        }
+
+        /* Stage Card */
+        .stage-box {
+            background: #faf9f5;
+            border-radius: 16px;
+            border: 1px solid var(--panel-border);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .canvas-wrapper {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            position: relative;
+            background: #faf9f5;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+
+        canvas#viewport {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Overlay pills */
+        .overlay-pill {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-family: monospace;
+            color: #f1f5f9;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .top-left-pill { top: 12px; left: 12px; }
+        .top-right-pill { top: 12px; right: 12px; }
+
+        .beat-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.3;
+            transition: all 0.06s ease;
+        }
+
+        .beat-indicator.active {
+            opacity: 1;
+            transform: scale(1.4);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .mode-banner {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 11px;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        /* Playback Bar */
+        .playback-bar {
+            background: #111520;
+            padding: 12px 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        button {
+            background: var(--btn-bg);
+            border: 1px solid var(--panel-border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        button:hover {
+            background: var(--btn-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        button.btn-accent {
+            background: var(--accent);
+            color: #000000;
+            font-weight: 700;
+            border: none;
+        }
+
+        button.btn-accent:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        button.btn-bone {
+            background: #0284c7;
+            color: #ffffff;
+            border: none;
+        }
+
+        button.btn-bone:hover {
+            background: #0369a1;
+        }
+
+        /* Sidebar Panels */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .panel-card {
+            background: var(--panel-bg);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--panel-border);
+            border-radius: 14px;
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+        }
+
+        .card-header {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Upload Area */
+        .upload-dropzone {
+            border: 2px dashed rgba(255, 255, 255, 0.22);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .upload-dropzone:hover, .upload-dropzone.dragover {
+            border-color: var(--accent);
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        .upload-dropzone span.icon {
+            font-size: 26px;
+        }
+
+        .upload-dropzone strong {
+            font-size: 13px;
+            color: #ffffff;
+        }
+
+        .upload-dropzone span.hint {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Current file info pill */
+        .file-info-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #151924;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .preset-images {
+            display: flex;
+            gap: 6px;
+        }
+
+        .preset-thumb-btn {
+            background: #171c26;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 11px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .preset-thumb-btn:hover {
+            border-color: var(--accent);
+            background: #202735;
+        }
+
+        /* Joint List */
+        .joint-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 180px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .joint-item {
+            background: #141822;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+        }
+
+        .joint-item:hover {
+            background: #1e2433;
+            border-color: var(--bone-color);
+        }
+
+        .joint-item.active {
+            border-color: var(--joint-active);
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        .joint-item .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--joint-color);
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        /* Choreography Selector */
+        .choreo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .choreo-btn {
+            background: #141822;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 10px 12px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            transition: all 0.15s ease;
+        }
+
+        .choreo-btn:hover {
+            background: #1d2332;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .choreo-btn.active {
+            background: rgba(245, 158, 11, 0.14);
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+        }
+
+        .choreo-btn .c-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .choreo-btn.active .c-title {
+            color: #fbbf24;
+        }
+
+        .choreo-btn .c-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+            line-height: 1.25;
+        }
+
+        /* Sliders */
+        .slider-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .slider-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .slider-info span.val {
+            font-family: monospace;
+            color: var(--accent);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #242c3d;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 6px rgba(0,0,0,0.5);
+            transition: transform 0.1s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Toggle row */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .toggle-row input[type="checkbox"] {
+            cursor: pointer;
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Pills */
+        .pills-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .pill-btn {
+            padding: 5px 10px;
+            border-radius: 16px;
+            font-size: 11px;
+            background: #141822;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+        }
+
+        .pill-btn.active {
+            background: #ffffff;
+            color: #000000;
+            font-weight: 700;
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Notification Toast -->
+    <div id="notificationBanner" class="info">
+        <span id="toastIcon">ℹ️</span>
+        <span id="toastMsg">Studio siap digunakan.</span>
+    </div>
+
+    <header>
+        <div class="badge-bar">
+            <span class="badge">Puppet Stop Motion 2D</span>
+            <span class="badge badge-bone">Editor Skeleton & Tulang</span>
+        </div>
+        <h1>Studio Skeleton & Tari Karakter</h1>
+        <p class="subtitle">Pasang dan atur sendi/tulang (skeleton) pada bagian tubuh gambar yang ingin digerakkan, lalu buat karakter menari secara bebas dengan ritme stop-motion.</p>
+    </header>
+
+    <!-- Mode Switcher -->
+    <div class="mode-switcher-container">
+        <button class="tab-btn bone-tab active" id="tabBoneMode">
+            <span>🦴</span> 1. Edit Skeleton & Sendi
+        </button>
+        <button class="tab-btn dance-tab" id="tabDanceMode">
+            <span>💃</span> 2. Mainkan Tarian
+        </button>
+    </div>
+
+    <div class="main-layout">
+        <!-- Canvas Stage Column -->
+        <div class="stage-box">
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <canvas id="viewport" width="700" height="700"></canvas>
+                <div class="overlay-pill top-left-pill" id="frameStatus">Mode: EDIT SKELETON</div>
+                <div class="overlay-pill top-right-pill" id="bpmStatus">
+                    <span class="beat-indicator" id="beatDot"></span>
+                    <span id="bpmVal">120 BPM</span>
+                </div>
+                <div class="mode-banner" id="modeBanner">
+                    <span id="bannerIcon">📍</span>
+                    <span id="bannerText">Tarik titik sendi (kuning) untuk menyesuaikan dengan posisi tubuh gambar</span>
+                </div>
+            </div>
+
+            <!-- Playback Bar -->
+            <div class="playback-bar">
+                <div class="btn-row">
+                    <button class="btn-accent" id="playToggleBtn">⏸ Jeda</button>
+                    <button id="prevFrameBtn" title="Frame Sebelumnya (Panah Kiri)">◀</button>
+                    <button id="nextFrameBtn" title="Frame Berikutnya (Panah Kanan)">▶</button>
+                </div>
+                <div class="btn-row">
+                    <button id="audioToggleBtn">🔊 Beat: AKTIF</button>
+                    <button id="recordVideoBtn">🎥 Rekam Video</button>
+                    <button id="snapshotBtn">📸 Snapshot</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Column -->
+        <div class="sidebar">
+
+            <!-- Card 1: Upload Gambar Baru -->
+            <div class="panel-card">
+                <div class="card-header">
+                    <span>📤 Unggah Gambar Baru</span>
+                </div>
+
+                <div class="upload-dropzone" id="dropzone">
+                    <span class="icon">📁</span>
+                    <strong>Pilih / Tarik Gambar ke Sini</strong>
+                    <span class="hint">JPG, PNG, WEBP (Bisa juga tekan Ctrl+V untuk Paste gambar)</span>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                </div>
+
+                <div class="file-info-bar" id="fileInfoBar">
+                    <span id="fileNameLabel">Gambar Aktif: dancing_character_cutout.png</span>
+                    <span id="fileDimLabel" style="font-family: monospace;">735 × 937</span>
+                </div>
+
+                <div class="toggle-row">
+                    <label for="autoBgRemoval" style="cursor: pointer;">✂️ Hapus Latar Belakang Otomatis (Flood Fill)</label>
+                    <input type="checkbox" id="autoBgRemoval" checked>
+                </div>
+
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Preset Gambar Contoh:</div>
+                <div class="preset-images">
+                    <button class="preset-thumb-btn" id="loadMonsterBtn">👾 Monster Bintang</button>
+                    <button class="preset-thumb-btn" id="loadMatisseBtn">🎨 Penari Matisse</button>
+                </div>
+            </div>
+
+            <!-- Card 2: Pengaturan Skeleton (Aktif di Mode 1) -->
+            <div class="panel-card" id="skeletonPanel">
+                <div class="card-header">
+                    <span>🦴 Titik Skeleton & Sendi</span>
+                    <span id="pinCountBadge" style="color: var(--bone-color); font-family: monospace;">6 Sendi</span>
+                </div>
+
+                <div class="btn-row" style="margin-bottom: 6px; flex-wrap: wrap;">
+                    <button class="btn-bone" id="addPinBtn">➕ Tambah Sendi</button>
+                    <button id="snapSkeletonBtn" title="Posisikan sendi otomatis ke tengah tubuh karakter">🎯 Auto-Snap Tubuh</button>
+                    <button id="removePinBtn" title="Hapus sendi yang sedang dipilih">🗑️ Hapus</button>
+                    <button id="resetPinsBtn" title="Kembalikan posisi sendi ke default">↺ Reset</button>
+                </div>
+
+                <div class="joint-list" id="jointListContainer">
+                    <!-- Dynamic joint list items inserted by JS -->
+                </div>
+
+                <div class="toggle-row" style="margin-top: 6px;">
+                    <label for="showBonesCheckbox">Tampilkan Garis Tulang & Label</label>
+                    <input type="checkbox" id="showBonesCheckbox" checked>
+                </div>
+            </div>
+
+            <!-- Card 3: Pilihan Tarian (Aktif di Mode 2) -->
+            <div class="panel-card" id="dancePanel">
+                <div class="card-header">
+                    <span>💃 Gaya Koreografi Tarian</span>
+                </div>
+                <div class="choreo-grid">
+                    <div class="choreo-btn active" data-choreo="funkGroove">
+                        <span class="c-title">🕺 Funk Groove</span>
+                        <span class="c-desc">Goyangan pinggul, anggukan kepala & lenturan lutut.</span>
+                    </div>
+                    <div class="choreo-btn" data-choreo="circleOrbit">
+                        <span class="c-title">🌀 Tarian Melingkar</span>
+                        <span class="c-desc">Melompat mengitari lintasan melingkar 3D.</span>
+                    </div>
+                    <div class="choreo-btn" data-choreo="wildJump">
+                        <span class="c-title">🚀 Lompatan Heboh</span>
+                        <span class="c-desc">Melayang tinggi ke udara dan mendarat lentur.</span>
+                    </div>
+                    <div class="choreo-btn" data-choreo="bodyWave">
+                        <span class="c-title">🌊 Ombak Tubuh</span>
+                        <span class="c-desc">Gelombang tarian mengalir dari kepala hingga kaki.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Parameter Gerakan Stop-Motion -->
+            <div class="panel-card">
+                <div class="card-header">
+                    <span>🎛️ Kendali Stop Motion</span>
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-info">
+                        <span>Kecepatan (FPS)</span>
+                        <span class="val" id="fpsVal">12 FPS</span>
+                    </div>
+                    <input type="range" id="fpsSlider" min="4" max="24" value="12" step="1">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-info">
+                        <span>Lenturan & Pantulan (Squash)</span>
+                        <span class="val" id="bounceVal">100%</span>
+                    </div>
+                    <input type="range" id="bounceSlider" min="0" max="200" value="100" step="5">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-info">
+                        <span>Lebar Ayunan (Sway)</span>
+                        <span class="val" id="swayVal">100%</span>
+                    </div>
+                    <input type="range" id="swaySlider" min="0" max="200" value="100" step="5">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-info">
+                        <span>Getaran Tinta (Stop-Motion Boil)</span>
+                        <span class="val" id="boilVal">Alami</span>
+                    </div>
+                    <input type="range" id="boilSlider" min="0" max="25" value="12" step="1">
+                </div>
+
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Panggung:</div>
+                <div class="pills-group">
+                    <div class="pill-btn active" data-bg="paper">Kertas Krem</div>
+                    <div class="pill-btn" data-bg="white">Studio Putih</div>
+                    <div class="pill-btn" data-bg="dark">Galeri Gelap</div>
+                    <div class="pill-btn" data-bg="grid">Kertas Grid</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        Klik sendi untuk memilih &middot; Tarik sendi untuk memposisikan &middot; [Spasi] Jeda/Putar &middot; [M] Suara Beat
+    </footer>
+
+    <script>
+        // ==========================================
+        // 1. STATE & SKELETON SETUP
+        // ==========================================
+        let appMode = 'boneEdit'; // 'boneEdit' or 'dance'
+        let currentChoreo = 'funkGroove';
+        let isPlaying = true;
+        let fps = 12;
+        let currentFrame = 0;
+        const totalFrames = 24;
+        let lastFrameTime = 0;
+
+        let bounceMultiplier = 1.0;
+        let swayMultiplier = 1.0;
+        let boilIntensity = 12;
+        let stageBg = 'paper';
+        let showBones = true;
+        let isMuted = false;
+
+        let isAddingPin = false;
+        let selectedPinIndex = -1;
+        let isDraggingPin = false;
+
+        const canvas = document.getElementById('viewport');
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+        const ocx = W / 2;
+        const ocy = H / 2;
+
+        // Current image loaded
+        let processedCanvas = document.createElement('canvas');
+        let processedCtx = processedCanvas.getContext('2d');
+        let imageLoaded = false;
+        let currentImageName = 'dancing_character_cutout.png';
+
+        // Mesh Resolution for 2D Skinning (16x16 is fast, robust, and looks great)
+        const GRID_RES = 16;
+
+        let defaultPins = [
+            { id: 'head',   name: 'Kepala (Head)',        u: 0.52, v: 0.30, parent: 'hips', radius: 160 },
+            { id: 'hips',   name: 'Pinggul (Pelvis)',     u: 0.50, v: 0.52, parent: null,   radius: 180 },
+            { id: 'l_hand', name: 'Tangan Kiri (L-Hand)', u: 0.16, v: 0.12, parent: 'hips', radius: 140 },
+            { id: 'r_hand', name: 'Tangan Kanan (R-Hand)',u: 0.90, v: 0.20, parent: 'hips', radius: 140 },
+            { id: 'l_foot', name: 'Kaki Kiri (L-Foot)',   u: 0.12, v: 0.56, parent: 'hips', radius: 150 },
+            { id: 'r_foot', name: 'Kaki Kanan (R-Foot)',  u: 0.65, v: 0.92, parent: 'hips', radius: 150 }
+        ];
+
+        let skeletonPins = JSON.parse(JSON.stringify(defaultPins));
+
+        // Toast Helper
+        let toastTimeout = null;
+        function notify(msg, type = 'info') {
+            const banner = document.getElementById('notificationBanner');
+            const icon = document.getElementById('toastIcon');
+            const text = document.getElementById('toastMsg');
+
+            banner.className = type;
+            icon.innerText = (type === 'success') ? '✅' : (type === 'error' ? '⚠️' : 'ℹ️');
+            text.innerText = msg;
+            banner.classList.add('show');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                banner.classList.remove('show');
+            }, 3500);
+        }
+
+        // ==========================================
+        // 2. BULLETPROOF IMAGE LOADER & FLOOD FILL
+        // ==========================================
+        function loadCharacterImage(srcUrl, autoRemoveBg = true, displayName = '') {
+            notify('Membaca gambar...', 'info');
+            imageLoaded = false;
+
+            const img = new Image();
+            // Do NOT set crossOrigin for data: URLs (prevents security errors)
+            if (!srcUrl.startsWith('data:')) {
+                img.crossOrigin = 'anonymous';
+            }
+
+            img.onload = () => {
+                try {
+                    let w = img.naturalWidth || img.width || 600;
+                    let h = img.naturalHeight || img.height || 600;
+
+                    // Constrain maximum working dimension to 800px for speed & stability
+                    const maxDim = 800;
+                    if (w > maxDim || h > maxDim) {
+                        const ratio = Math.min(maxDim / w, maxDim / h);
+                        w = Math.round(w * ratio);
+                        h = Math.round(h * ratio);
+                    }
+
+                    processedCanvas.width = w;
+                    processedCanvas.height = h;
+                    processedCtx.clearRect(0, 0, w, h);
+                    processedCtx.drawImage(img, 0, 0, w, h);
+
+                    // Auto background removal if requested
+                    if (autoRemoveBg) {
+                        try {
+                            removeBackgroundFloodFill(processedCanvas, processedCtx);
+                        } catch (bgErr) {
+                            console.warn('Flood fill warning:', bgErr);
+                        }
+                    }
+
+                    currentImageName = displayName || (srcUrl.startsWith('data:') ? 'Gambar Unggahan' : srcUrl);
+                    document.getElementById('fileNameLabel').innerText = 'Gambar: ' + currentImageName;
+                    document.getElementById('fileDimLabel').innerText = `${w} × ${h}`;
+
+                    imageLoaded = true;
+                    notify('Gambar berhasil dimuat!', 'success');
+                    drawStage();
+                } catch (err) {
+                    console.error('Error drawing image to canvas:', err);
+                    notify('Gagal memproses gambar: ' + err.message, 'error');
+                }
+            };
+
+            img.onerror = (err) => {
+                console.error('Failed to load image:', err);
+                notify('Gagal membaca gambar. Pastikan format file adalah JPG, PNG, atau WEBP.', 'error');
+            };
+
+            img.src = srcUrl;
+        }
+
+        // Fast & Safe Flood Fill Background Removal
+        function removeBackgroundFloodFill(c, cCtx) {
+            const w = c.width;
+            const h = c.height;
+            const imgData = cCtx.getImageData(0, 0, w, h);
+            const data = imgData.data;
+
+            // Check if already transparent (> 4% transparent pixels)
+            let transSample = 0;
+            for (let i = 3; i < data.length; i += 40) {
+                if (data[i] < 40) transSample++;
+            }
+            if (transSample > (data.length / 40) * 0.04) {
+                return; // Already transparent cutout
+            }
+
+            // Sample 4 corner colors
+            const corners = [0, (w - 1) * 4, (h - 1) * w * 4, ((h - 1) * w + (w - 1)) * 4];
+            let avgR = 0, avgG = 0, avgB = 0;
+            corners.forEach(idx => {
+                avgR += data[idx]; avgG += data[idx + 1]; avgB += data[idx + 2];
+            });
+            avgR /= 4; avgG /= 4; avgB /= 4;
+
+            // Pre-allocated typed arrays to prevent heap fragmentation
+            const visited = new Uint8Array(w * h);
+            const queue = new Int32Array(w * h);
+            let head = 0, tail = 0;
+
+            // Seed borders
+            for (let x = 0; x < w; x++) {
+                queue[tail++] = x; visited[x] = 1;
+                const bottom = (h - 1) * w + x;
+                queue[tail++] = bottom; visited[bottom] = 1;
+            }
+            for (let y = 1; y < h - 1; y++) {
+                const left = y * w;
+                queue[tail++] = left; visited[left] = 1;
+                const right = y * w + (w - 1);
+                queue[tail++] = right; visited[right] = 1;
+            }
+
+            const threshold = 50;
+
+            while (head < tail) {
+                const pos = queue[head++];
+                const cx = pos % w;
+                const cy = (pos / w) | 0;
+                const idx = pos * 4;
+
+                const r = data[idx];
+                const g = data[idx + 1];
+                const b = data[idx + 2];
+
+                const diff = Math.abs(r - avgR) + Math.abs(g - avgG) + Math.abs(b - avgB);
+
+                if (diff < threshold * 3 || (r > 225 && g > 225 && b > 225)) {
+                    data[idx + 3] = 0; // Transparent!
+
+                    if (cx > 0 && !visited[pos - 1]) { visited[pos - 1] = 1; queue[tail++] = pos - 1; }
+                    if (cx < w - 1 && !visited[pos + 1]) { visited[pos + 1] = 1; queue[tail++] = pos + 1; }
+                    if (cy > 0 && !visited[pos - w]) { visited[pos - w] = 1; queue[tail++] = pos - w; }
+                    if (cy < h - 1 && !visited[pos + w]) { visited[pos + w] = 1; queue[tail++] = pos + w; }
+                }
+            }
+
+            cCtx.putImageData(imgData, 0, 0);
+        }
+
+        // Auto-Snap Skeleton onto character body bounds
+        function autoSnapSkeletonToImage() {
+            if (!imageLoaded) return;
+            const w = processedCanvas.width;
+            const h = processedCanvas.height;
+            const imgData = processedCtx.getImageData(0, 0, w, h);
+            const data = imgData.data;
+
+            let minX = w, maxX = 0, minY = h, maxY = 0;
+            let found = false;
+
+            for (let y = 0; y < h; y += 4) {
+                for (let x = 0; x < w; x += 4) {
+                    const idx = (y * w + x) * 4;
+                    if (data[idx + 3] > 40) { // Non-transparent pixel
+                        if (x < minX) minX = x;
+                        if (x > maxX) maxX = x;
+                        if (y < minY) minY = y;
+                        if (y > maxY) maxY = y;
+                        found = true;
+                    }
+                }
+            }
+
+            if (!found) {
+                notify('Tidak dapat mendeteksi siluet tubuh.', 'info');
+                return;
+            }
+
+            const normMinX = minX / w;
+            const normMaxX = maxX / w;
+            const normMinY = minY / h;
+            const normMaxY = maxY / h;
+
+            const midX = (normMinX + normMaxX) / 2;
+            const spanX = normMaxX - normMinX;
+            const spanY = normMaxY - normMinY;
+
+            skeletonPins.forEach(pin => {
+                if (pin.id === 'head') {
+                    pin.u = midX;
+                    pin.v = normMinY + spanY * 0.16;
+                } else if (pin.id === 'hips') {
+                    pin.u = midX;
+                    pin.v = normMinY + spanY * 0.50;
+                } else if (pin.id === 'l_hand') {
+                    pin.u = normMinX + spanX * 0.10;
+                    pin.v = normMinY + spanY * 0.22;
+                } else if (pin.id === 'r_hand') {
+                    pin.u = normMaxX - spanX * 0.10;
+                    pin.v = normMinY + spanY * 0.25;
+                } else if (pin.id === 'l_foot') {
+                    pin.u = normMinX + spanX * 0.18;
+                    pin.v = normMaxY - spanY * 0.10;
+                } else if (pin.id === 'r_foot') {
+                    pin.u = normMaxX - spanX * 0.25;
+                    pin.v = normMaxY - spanY * 0.05;
+                }
+            });
+
+            updateJointListUI();
+            drawStage();
+            notify('Sendi berhasil disesuaikan dengan posisi tubuh gambar!', 'success');
+        }
+
+        // ==========================================
+        // 3. RBF MESH DEFORMATION
+        // ==========================================
+        function computeDeformedVertices(pinTargets, drawWidth, drawHeight) {
+            const verts = [];
+            const rows = GRID_RES;
+            const cols = GRID_RES;
+
+            for (let r = 0; r <= rows; r++) {
+                for (let c = 0; c <= cols; c++) {
+                    const u = c / cols;
+                    const v = r / rows;
+                    const origX = (u - 0.5) * drawWidth;
+                    const origY = (v - 0.5) * drawHeight;
+
+                    let totalWeight = 0;
+                    let dispX = 0;
+                    let dispY = 0;
+
+                    for (let i = 0; i < skeletonPins.length; i++) {
+                        const pin = skeletonPins[i];
+                        const target = pinTargets[i];
+
+                        const pOrigX = (pin.u - 0.5) * drawWidth;
+                        const pOrigY = (pin.v - 0.5) * drawHeight;
+
+                        const dx = origX - pOrigX;
+                        const dy = origY - pOrigY;
+                        const distSq = dx * dx + dy * dy;
+
+                        const radSq = pin.radius * pin.radius;
+                        const w = 1.0 / (Math.pow(distSq / radSq + 0.04, 1.8));
+
+                        dispX += w * (target.x - pOrigX);
+                        dispY += w * (target.y - pOrigY);
+                        totalWeight += w;
+                    }
+
+                    const finalX = origX + (dispX / (totalWeight || 1));
+                    const finalY = origY + (dispY / (totalWeight || 1));
+
+                    verts.push({ x: finalX, y: finalY, u: u, v: v });
+                }
+            }
+            return verts;
+        }
+
+        function renderMesh(ctx, img, verts, cols, rows, imgW, imgH) {
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const i0 = r * (cols + 1) + c;
+                    const i1 = i0 + 1;
+                    const i2 = (r + 1) * (cols + 1) + c;
+                    const i3 = i2 + 1;
+
+                    drawTexturedTriangle(ctx, img,
+                        verts[i0].x, verts[i0].y, verts[i0].u * imgW, verts[i0].v * imgH,
+                        verts[i1].x, verts[i1].y, verts[i1].u * imgW, verts[i1].v * imgH,
+                        verts[i2].x, verts[i2].y, verts[i2].u * imgW, verts[i2].v * imgH
+                    );
+
+                    drawTexturedTriangle(ctx, img,
+                        verts[i1].x, verts[i1].y, verts[i1].u * imgW, verts[i1].v * imgH,
+                        verts[i3].x, verts[i3].y, verts[i3].u * imgW, verts[i3].v * imgH,
+                        verts[i2].x, verts[i2].y, verts[i2].u * imgW, verts[i2].v * imgH
+                    );
+                }
+            }
+        }
+
+        function drawTexturedTriangle(ctx, img, x0, y0, u0, v0, x1, y1, u1, v1, x2, y2, u2, v2) {
+            if (!img || !img.width || !img.height) return;
+
+            const denom = u0 * (v1 - v2) + u1 * (v2 - v0) + u2 * (v0 - v1);
+            if (Math.abs(denom) < 0.0001) return;
+
+            ctx.save();
+
+            // Expand triangle slightly by 0.6px from centroid to eliminate seams
+            const cx = (x0 + x1 + x2) / 3;
+            const cy = (y0 + y1 + y2) / 3;
+            const d0 = Math.hypot(x0 - cx, y0 - cy) || 1;
+            const d1 = Math.hypot(x1 - cx, y1 - cy) || 1;
+            const d2 = Math.hypot(x2 - cx, y2 - cy) || 1;
+            const px0 = x0 + (x0 - cx) * (0.6 / d0);
+            const py0 = y0 + (y0 - cy) * (0.6 / d0);
+            const px1 = x1 + (x1 - cx) * (0.6 / d1);
+            const py1 = y1 + (y1 - cy) * (0.6 / d1);
+            const px2 = x2 + (x2 - cx) * (0.6 / d2);
+            const py2 = y2 + (y2 - cy) * (0.6 / d2);
+
+            ctx.beginPath();
+            ctx.moveTo(px0, py0);
+            ctx.lineTo(px1, py1);
+            ctx.lineTo(px2, py2);
+            ctx.closePath();
+            ctx.clip();
+
+            // Mathematically exact affine transformation: (u,v,1) -> (x,y,1)
+            const a = (x0 * (v1 - v2) + x1 * (v2 - v0) + x2 * (v0 - v1)) / denom;
+            const b = (y0 * (v1 - v2) + y1 * (v2 - v0) + y2 * (v0 - v1)) / denom;
+            const c = (x0 * (u2 - u1) + x1 * (u0 - u2) + x2 * (u1 - u0)) / denom;
+            const d = (y0 * (u2 - u1) + y1 * (u0 - u2) + y2 * (u1 - u0)) / denom;
+            const e = (x0 * (u1 * v2 - u2 * v1) + x1 * (u2 * v0 - u0 * v2) + x2 * (u0 * v1 - u1 * v0)) / denom;
+            const f = (y0 * (u1 * v2 - u2 * v1) + y1 * (u2 * v0 - u0 * v2) + y2 * (u0 * v1 - u1 * v0)) / denom;
+
+            ctx.transform(a, b, c, d, e, f);
+            ctx.drawImage(img, 0, 0);
+            ctx.restore();
+        }
+
+        // ==========================================
+        // 4. ANIMATION PROCEDURAL CHOREOGRAPHY
+        // ==========================================
+        function getAnimatedPinTargets(frameIdx, drawWidth, drawHeight) {
+            const t = frameIdx / totalFrames;
+            const cycleRad = t * 2 * Math.PI;
+
+            const targets = [];
+
+            for (let i = 0; i < skeletonPins.length; i++) {
+                const pin = skeletonPins[i];
+                const baseOriginX = (pin.u - 0.5) * drawWidth;
+                const baseOriginY = (pin.v - 0.5) * drawHeight;
+
+                let offX = 0;
+                let offY = 0;
+
+                if (appMode === 'dance') {
+                    if (currentChoreo === 'funkGroove') {
+                        const bouncePhase = cycleRad * 2;
+                        const swayX = Math.sin(cycleRad) * 35 * swayMultiplier;
+                        const jumpY = Math.max(0, -Math.cos(bouncePhase)) * 24 * bounceMultiplier;
+                        const squashY = Math.cos(bouncePhase) * 16 * bounceMultiplier;
+
+                        if (pin.id === 'hips') {
+                            offX = swayX * 0.8;
+                            offY = -jumpY + squashY * 0.6;
+                        } else if (pin.id === 'head') {
+                            offX = swayX * 1.2 + Math.sin(cycleRad) * 18;
+                            offY = -jumpY - squashY * 0.4;
+                        } else if (pin.id === 'l_hand') {
+                            offX = swayX + Math.sin(cycleRad * 2) * 25;
+                            offY = -jumpY - Math.cos(cycleRad) * 35;
+                        } else if (pin.id === 'r_hand') {
+                            offX = swayX + Math.cos(cycleRad * 2) * 25;
+                            offY = -jumpY + Math.sin(cycleRad) * 35;
+                        } else if (pin.id === 'l_foot') {
+                            offX = swayX * 0.4;
+                            offY = Math.sin(bouncePhase) * 20 * bounceMultiplier;
+                        } else if (pin.id === 'r_foot') {
+                            offX = swayX * 0.4;
+                            offY = -Math.sin(bouncePhase) * 20 * bounceMultiplier;
+                        } else {
+                            offX = swayX;
+                            offY = -jumpY;
+                        }
+                    } else if (currentChoreo === 'circleOrbit') {
+                        const orbitX = Math.sin(cycleRad) * 110 * swayMultiplier;
+                        const orbitY = Math.cos(cycleRad) * 60;
+                        const hopWave = Math.cos(cycleRad * 4);
+                        const hopY = Math.max(0, -hopWave) * 18 * bounceMultiplier;
+                        const tilt = Math.cos(cycleRad) * 25;
+
+                        offX = orbitX + (pin.u - 0.5) * tilt;
+                        offY = orbitY - hopY;
+                    } else if (currentChoreo === 'wildJump') {
+                        const jumpHeight = Math.max(0, -Math.sin(cycleRad)) * 85 * bounceMultiplier;
+                        const spinSway = Math.sin(cycleRad * 2) * 40 * swayMultiplier;
+
+                        offX = spinSway;
+                        offY = -jumpHeight;
+                        if (pin.id === 'l_hand' || pin.id === 'r_hand') {
+                            offY -= Math.sin(cycleRad) * 40;
+                        }
+                    } else if (currentChoreo === 'bodyWave') {
+                        const wavePhase = cycleRad + (pin.v * Math.PI * 2.5);
+                        offX = Math.sin(wavePhase) * 45 * swayMultiplier;
+                        offY = Math.cos(wavePhase) * 15 * bounceMultiplier;
+                    }
+                }
+
+                targets.push({
+                    x: baseOriginX + offX,
+                    y: baseOriginY + offY
+                });
+            }
+
+            return targets;
+        }
+
+        // ==========================================
+        // 5. STAGE DRAWING
+        // ==========================================
+        function drawBackground() {
+            if (stageBg === 'paper') {
+                ctx.fillStyle = '#faf9f5';
+                ctx.fillRect(0, 0, W, H);
+            } else if (stageBg === 'white') {
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, W, H);
+            } else if (stageBg === 'dark') {
+                ctx.fillStyle = '#11141c';
+                ctx.fillRect(0, 0, W, H);
+            } else if (stageBg === 'grid') {
+                ctx.fillStyle = '#faf9f5';
+                ctx.fillRect(0, 0, W, H);
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.06)';
+                ctx.lineWidth = 1;
+                for (let x = 0; x < W; x += 25) {
+                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+                }
+                for (let y = 0; y < H; y += 25) {
+                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+                }
+            }
+        }
+
+        function drawStage() {
+            drawBackground();
+
+            if (!imageLoaded) {
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '14px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Memuat gambar karakter...', ocx, ocy);
+                return;
+            }
+
+            const scale = Math.min((W * 0.75) / processedCanvas.width, (H * 0.75) / processedCanvas.height);
+            const drawW = processedCanvas.width * scale;
+            const drawH = processedCanvas.height * scale;
+
+            const jx = (appMode === 'dance') ? (Math.random() * 2 - 1) * (boilIntensity * 0.1) : 0;
+            const jy = (appMode === 'dance') ? (Math.random() * 2 - 1) * (boilIntensity * 0.1) : 0;
+
+            const pinTargets = getAnimatedPinTargets(currentFrame, drawW, drawH);
+
+            if (appMode === 'dance') {
+                // Draw shadow
+                ctx.save();
+                ctx.fillStyle = stageBg === 'dark' ? 'rgba(0,0,0,0.6)' : 'rgba(30, 30, 40, 0.22)';
+                const hipTarget = pinTargets.find((p, i) => skeletonPins[i].id === 'hips') || { x: 0, y: 0 };
+                ctx.beginPath();
+                ctx.ellipse(ocx + hipTarget.x * 0.7, ocy + drawH * 0.42, 70, 16, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                // Draw deformed mesh
+                ctx.save();
+                ctx.translate(ocx + jx, ocy + jy);
+                try {
+                    const meshVerts = computeDeformedVertices(pinTargets, drawW, drawH);
+                    renderMesh(ctx, processedCanvas, meshVerts, GRID_RES, GRID_RES, processedCanvas.width, processedCanvas.height);
+                } catch (meshErr) {
+                    console.error('Mesh render error:', meshErr);
+                    // Safe Fallback: draw directly so image never disappears!
+                    ctx.drawImage(processedCanvas, -drawW / 2, -drawH / 2, drawW, drawH);
+                }
+                ctx.restore();
+            } else {
+                // In Edit Mode: Draw REST POSE directly (super crisp and fast!)
+                ctx.save();
+                ctx.translate(ocx, ocy);
+                ctx.drawImage(processedCanvas, -drawW / 2, -drawH / 2, drawW, drawH);
+                ctx.restore();
+            }
+
+            // Draw skeleton pins and lines overlay
+            if (showBones || appMode === 'boneEdit') {
+                drawSkeletonOverlay(pinTargets, drawW, drawH);
+            }
+
+            // Update UI Counters
+            document.getElementById('frameStatus').innerText =
+                (appMode === 'boneEdit') ? '🦴 MODE: EDIT SKELETON' : `💃 TARI: Frame ${String(currentFrame + 1).padStart(2, '0')} / ${totalFrames}`;
+
+            const quarter = totalFrames / 4;
+            const beatNum = Math.floor(currentFrame / quarter);
+            const isBeatHit = (currentFrame % Math.round(quarter) === 0);
+
+            const beatDot = document.getElementById('beatDot');
+            if (isBeatHit) {
+                beatDot.classList.add('active');
+                setTimeout(() => beatDot.classList.remove('active'), 80);
+                if (isPlaying && appMode === 'dance') {
+                    const isKick = (beatNum === 0 || beatNum === 2);
+                    const isClap = (beatNum === 1 || beatNum === 3);
+                    playFunkyBeat(isKick, isClap);
+                }
+            }
+        }
+
+        function drawSkeletonOverlay(pinTargets, drawW, drawH) {
+            ctx.save();
+            ctx.translate(ocx, ocy);
+
+            const pinMap = {};
+            for (let i = 0; i < skeletonPins.length; i++) {
+                pinMap[skeletonPins[i].id] = { pin: skeletonPins[i], target: pinTargets[i], index: i };
+            }
+
+            // 1. Bones lines
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+
+            for (let i = 0; i < skeletonPins.length; i++) {
+                const p = skeletonPins[i];
+                if (p.parent && pinMap[p.parent]) {
+                    const parentTarget = pinMap[p.parent].target;
+                    const childTarget = pinTargets[i];
+
+                    ctx.beginPath();
+                    ctx.moveTo(parentTarget.x, parentTarget.y);
+                    ctx.lineTo(childTarget.x, childTarget.y);
+                    ctx.stroke();
+                }
+            }
+
+            // 2. Joints
+            for (let i = 0; i < skeletonPins.length; i++) {
+                const target = pinTargets[i];
+                const isSelected = (i === selectedPinIndex);
+
+                if (appMode === 'boneEdit') {
+                    ctx.strokeStyle = isSelected ? 'rgba(239, 68, 68, 0.4)' : 'rgba(56, 189, 248, 0.2)';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.arc(target.x, target.y, skeletonPins[i].radius * 0.45, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+
+                ctx.fillStyle = isSelected ? '#ef4444' : '#facc15';
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2.5;
+
+                ctx.beginPath();
+                ctx.arc(target.x, target.y, isSelected ? 9 : 7, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                if (appMode === 'boneEdit') {
+                    ctx.fillStyle = '#0f172a';
+                    const textWidth = ctx.measureText(skeletonPins[i].name).width;
+                    ctx.fillRect(target.x + 12, target.y - 12, textWidth + 10, 18);
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(target.x + 12, target.y - 12, textWidth + 10, 18);
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '11px sans-serif';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(skeletonPins[i].name, target.x + 17, target.y + 1);
+                }
+            }
+            ctx.restore();
+        }
+
+        // Animation Loop
+        function animate(timestamp) {
+            if (!lastFrameTime) lastFrameTime = timestamp;
+            const elapsed = timestamp - lastFrameTime;
+            const frameDuration = 1000 / fps;
+
+            if (isPlaying && appMode === 'dance' && elapsed >= frameDuration) {
+                currentFrame = (currentFrame + 1) % totalFrames;
+                drawStage();
+                lastFrameTime = timestamp - (elapsed % frameDuration);
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // ==========================================
+        // 6. INTERACTIVE PIN DRAGGING & EDITING
+        // ==========================================
+        function getCanvasMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (clientX - rect.left) * scaleX - ocx,
+                y: (clientY - rect.top) * scaleY - ocy
+            };
+        }
+
+        function findPinNear(x, y) {
+            const scale = Math.min((W * 0.75) / processedCanvas.width, (H * 0.75) / processedCanvas.height);
+            const drawW = processedCanvas.width * scale;
+            const drawH = processedCanvas.height * scale;
+
+            for (let i = 0; i < skeletonPins.length; i++) {
+                const pin = skeletonPins[i];
+                const px = (pin.u - 0.5) * drawW;
+                const py = (pin.v - 0.5) * drawH;
+                const dist = Math.hypot(x - px, y - py);
+                if (dist <= 20) return i;
+            }
+            return -1;
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const pos = getCanvasMousePos(e);
+
+            if (isAddingPin) {
+                const scale = Math.min((W * 0.75) / processedCanvas.width, (H * 0.75) / processedCanvas.height);
+                const drawW = processedCanvas.width * scale;
+                const drawH = processedCanvas.height * scale;
+
+                const u = Math.max(0, Math.min(1, (pos.x / drawW) + 0.5));
+                const v = Math.max(0, Math.min(1, (pos.y / drawH) + 0.5));
+
+                const pinCount = skeletonPins.length + 1;
+                skeletonPins.push({
+                    id: 'custom_' + Date.now(),
+                    name: 'Sendi Baru #' + pinCount,
+                    u: u,
+                    v: v,
+                    parent: 'hips',
+                    radius: 150
+                });
+
+                isAddingPin = false;
+                document.getElementById('addPinBtn').innerText = '➕ Tambah Sendi';
+                document.getElementById('addPinBtn').classList.remove('btn-accent');
+                selectedPinIndex = skeletonPins.length - 1;
+                updateJointListUI();
+                drawStage();
+                notify('Sendi baru berhasil ditambahkan!', 'success');
+                return;
+            }
+
+            const hitIndex = findPinNear(pos.x, pos.y);
+            if (hitIndex !== -1) {
+                selectedPinIndex = hitIndex;
+                isDraggingPin = true;
+                updateJointListUI();
+                drawStage();
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDraggingPin || selectedPinIndex === -1) return;
+            const pos = getCanvasMousePos(e);
+            const scale = Math.min((W * 0.75) / processedCanvas.width, (H * 0.75) / processedCanvas.height);
+            const drawW = processedCanvas.width * scale;
+            const drawH = processedCanvas.height * scale;
+
+            const u = Math.max(0, Math.min(1, (pos.x / drawW) + 0.5));
+            const v = Math.max(0, Math.min(1, (pos.y / drawH) + 0.5));
+
+            skeletonPins[selectedPinIndex].u = u;
+            skeletonPins[selectedPinIndex].v = v;
+
+            drawStage();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDraggingPin = false;
+        });
+
+        // ==========================================
+        // 7. AUDIO SYNTH
+        // ==========================================
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function playFunkyBeat(isKick, isClap) {
+            if (isMuted || !audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                if (isKick) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.frequency.setValueAtTime(140, now);
+                    osc.frequency.exponentialRampToValueAtTime(35, now + 0.13);
+                    gain.gain.setValueAtTime(0.35, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                    osc.start(now); osc.stop(now + 0.16);
+                }
+                if (isClap) {
+                    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.08, audioCtx.sampleRate);
+                    const data = buf.getChannelData(0);
+                    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * 0.12;
+                    const noise = audioCtx.createBufferSource();
+                    noise.buffer = buf;
+                    const filter = audioCtx.createBiquadFilter();
+                    filter.type = 'bandpass'; filter.frequency.value = 1750; filter.Q.value = 2.0;
+                    const gain = audioCtx.createGain();
+                    gain.gain.setValueAtTime(0.22, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+                    noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+                    noise.start(now);
+                }
+            } catch (e) {}
+        }
+
+        // ==========================================
+        // 8. CONTROLS & UI EVENT HANDLERS
+        // ==========================================
+        function updateJointListUI() {
+            const container = document.getElementById('jointListContainer');
+            container.innerHTML = '';
+            document.getElementById('pinCountBadge').innerText = `${skeletonPins.length} Sendi`;
+
+            skeletonPins.forEach((pin, idx) => {
+                const item = document.createElement('div');
+                item.className = 'joint-item' + (idx === selectedPinIndex ? ' active' : '');
+                item.innerHTML = `
+                    <span><span class="badge-dot"></span><strong>${pin.name}</strong></span>
+                    <span style="color: #64748b; font-size: 11px;">U: ${pin.u.toFixed(2)} V: ${pin.v.toFixed(2)}</span>
+                `;
+                item.onclick = () => {
+                    selectedPinIndex = idx;
+                    updateJointListUI();
+                    drawStage();
+                };
+                container.appendChild(item);
+            });
+        }
+
+        const tabBone = document.getElementById('tabBoneMode');
+        const tabDance = document.getElementById('tabDanceMode');
+        const bannerIcon = document.getElementById('bannerIcon');
+        const bannerText = document.getElementById('bannerText');
+
+        tabBone.onclick = () => {
+            appMode = 'boneEdit';
+            tabBone.classList.add('active');
+            tabDance.classList.remove('active');
+            bannerIcon.innerText = '📍';
+            bannerText.innerText = 'Tarik titik sendi (kuning) untuk menyesuaikan dengan posisi tubuh gambar';
+            drawStage();
+        };
+
+        tabDance.onclick = () => {
+            initAudio();
+            appMode = 'dance';
+            tabDance.classList.add('active');
+            tabBone.classList.remove('active');
+            bannerIcon.innerText = '💃';
+            bannerText.innerText = 'Karakter menari mengikuti tatanan skeleton & ketukan ritmik!';
+            drawStage();
+        };
+
+        const addPinBtn = document.getElementById('addPinBtn');
+        addPinBtn.onclick = () => {
+            isAddingPin = !isAddingPin;
+            if (isAddingPin) {
+                addPinBtn.innerText = '👆 Klik pada Karakter...';
+                addPinBtn.classList.add('btn-accent');
+                notify('Silakan klik pada gambar di panggung untuk menaruh sendi baru.', 'info');
+            } else {
+                addPinBtn.innerText = '➕ Tambah Sendi';
+                addPinBtn.classList.remove('btn-accent');
+            }
+        };
+
+        document.getElementById('snapSkeletonBtn').onclick = () => {
+            autoSnapSkeletonToImage();
+        };
+
+        document.getElementById('removePinBtn').onclick = () => {
+            if (selectedPinIndex >= 0 && skeletonPins.length > 2) {
+                skeletonPins.splice(selectedPinIndex, 1);
+                selectedPinIndex = Math.max(0, selectedPinIndex - 1);
+                updateJointListUI();
+                drawStage();
+                notify('Sendi dihapus.', 'info');
+            } else {
+                notify('Minimal harus ada 2 titik sendi!', 'error');
+            }
+        };
+
+        document.getElementById('resetPinsBtn').onclick = () => {
+            skeletonPins = JSON.parse(JSON.stringify(defaultPins));
+            selectedPinIndex = -1;
+            updateJointListUI();
+            drawStage();
+            notify('Skeleton dikembalikan ke posisi default.', 'info');
+        };
+
+        document.getElementById('showBonesCheckbox').onchange = (e) => {
+            showBones = e.target.checked;
+            drawStage();
+        };
+
+        document.querySelectorAll('.choreo-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.choreo-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentChoreo = btn.getAttribute('data-choreo');
+                drawStage();
+            };
+        });
+
+        const fpsSlider = document.getElementById('fpsSlider');
+        fpsSlider.oninput = (e) => {
+            fps = parseInt(e.target.value);
+            document.getElementById('fpsVal').innerText = fps + ' FPS';
+            const approxBpm = Math.round((fps / totalFrames) * 4 * 60);
+            document.getElementById('bpmVal').innerText = approxBpm + ' BPM';
+        };
+
+        const bounceSlider = document.getElementById('bounceSlider');
+        bounceSlider.oninput = (e) => {
+            bounceMultiplier = parseInt(e.target.value) / 100;
+            document.getElementById('bounceVal').innerText = e.target.value + '%';
+            if (appMode !== 'dance' || !isPlaying) drawStage();
+        };
+
+        const swaySlider = document.getElementById('swaySlider');
+        swaySlider.oninput = (e) => {
+            swayMultiplier = parseInt(e.target.value) / 100;
+            document.getElementById('swayVal').innerText = e.target.value + '%';
+            if (appMode !== 'dance' || !isPlaying) drawStage();
+        };
+
+        const boilSlider = document.getElementById('boilSlider');
+        boilSlider.oninput = (e) => {
+            boilIntensity = parseInt(e.target.value);
+            const labels = ['Mati', 'Halus', 'Alami', 'Tinggi', 'Ekstrem'];
+            const idx = Math.min(labels.length - 1, Math.floor(boilIntensity / 6));
+            document.getElementById('boilVal').innerText = labels[idx];
+            if (appMode !== 'dance' || !isPlaying) drawStage();
+        };
+
+        document.querySelectorAll('.pill-btn').forEach(pill => {
+            pill.onclick = () => {
+                document.querySelectorAll('.pill-btn').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                stageBg = pill.getAttribute('data-bg');
+                document.getElementById('canvasWrapper').style.background =
+                    (stageBg === 'dark' ? '#11141c' : (stageBg === 'white' ? '#ffffff' : '#faf9f5'));
+                drawStage();
+            };
+        });
+
+        const playToggleBtn = document.getElementById('playToggleBtn');
+        playToggleBtn.onclick = () => {
+            initAudio();
+            isPlaying = !isPlaying;
+            playToggleBtn.innerText = isPlaying ? '⏸ Jeda' : '▶ Putar';
+        };
+
+        document.getElementById('prevFrameBtn').onclick = () => {
+            isPlaying = false;
+            playToggleBtn.innerText = '▶ Putar';
+            currentFrame = (currentFrame - 1 + totalFrames) % totalFrames;
+            drawStage();
+        };
+
+        document.getElementById('nextFrameBtn').onclick = () => {
+            isPlaying = false;
+            playToggleBtn.innerText = '▶ Putar';
+            currentFrame = (currentFrame + 1) % totalFrames;
+            drawStage();
+        };
+
+        const audioToggleBtn = document.getElementById('audioToggleBtn');
+        audioToggleBtn.onclick = () => {
+            initAudio();
+            isMuted = !isMuted;
+            audioToggleBtn.innerText = isMuted ? '🔇 Beat: MATI' : '🔊 Beat: AKTIF';
+        };
+
+        document.getElementById('snapshotBtn').onclick = () => {
+            const link = document.createElement('a');
+            link.download = `skeleton_dance_frame_${String(currentFrame + 1).padStart(2, '0')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            notify('Snapshot berhasil diunduh!', 'success');
+        };
+
+        const recordVideoBtn = document.getElementById('recordVideoBtn');
+        let isRecording = false;
+
+        recordVideoBtn.onclick = () => {
+            if (isRecording) return;
+            if (!('MediaRecorder' in window)) {
+                notify('Browser Anda tidak mendukung MediaRecorder API.', 'error');
+                return;
+            }
+
+            isRecording = true;
+            recordVideoBtn.innerText = '🔴 Merekam...';
+            recordVideoBtn.style.background = '#ef4444';
+            recordVideoBtn.style.color = '#ffffff';
+
+            const stream = canvas.captureStream(fps);
+            let mimeType = 'video/webm;codecs=vp9';
+            if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/webm';
+
+            const recorder = new MediaRecorder(stream, { mimeType });
+            const chunks = [];
+
+            recorder.ondataavailable = (e) => {
+                if (e.data && e.data.size > 0) chunks.push(e.data);
+            };
+
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'skeleton_dance_' + currentChoreo + '.webm';
+                a.click();
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                isRecording = false;
+                recordVideoBtn.innerText = '🎥 Rekam Video';
+                recordVideoBtn.style.background = '';
+                recordVideoBtn.style.color = '';
+                notify('Video berhasil disimpan!', 'success');
+            };
+
+            recorder.start();
+            setTimeout(() => {
+                if (recorder.state === 'recording') recorder.stop();
+            }, (totalFrames / fps) * 2000);
+        };
+
+        // ==========================================
+        // 9. UPLOAD & CLIPBOARD HANDLERS
+        // ==========================================
+        const fileInput = document.getElementById('fileInput');
+        const dropzone = document.getElementById('dropzone');
+        const autoBgRemoval = document.getElementById('autoBgRemoval');
+
+        dropzone.onclick = () => fileInput.click();
+
+        function handleUploadedFile(file) {
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                notify('Berkas harus berupa gambar (PNG, JPG, WEBP).', 'error');
+                return;
+            }
+
+            notify(`Membaca ${file.name}...`, 'info');
+            const reader = new FileReader();
+
+            reader.onload = (evt) => {
+                const result = evt.target.result;
+                if (!result) {
+                    notify('Gagal membaca isi berkas gambar.', 'error');
+                    return;
+                }
+                loadCharacterImage(result, autoBgRemoval.checked, file.name);
+            };
+
+            reader.onerror = () => {
+                notify('Gagal membaca berkas dari sistem penyimpanan.', 'error');
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        fileInput.onchange = (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (file) {
+                handleUploadedFile(file);
+                fileInput.value = ''; // Reset so uploading same file again triggers onchange
+            }
+        };
+
+        dropzone.ondragover = (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        };
+
+        dropzone.ondragleave = () => {
+            dropzone.classList.remove('dragover');
+        };
+
+        dropzone.ondrop = (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+            const file = e.dataTransfer.files && e.dataTransfer.files[0];
+            if (file) handleUploadedFile(file);
+        };
+
+        // Clipboard Paste (Ctrl+V) handler
+        window.addEventListener('paste', (e) => {
+            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+            for (let item of items) {
+                if (item.type.indexOf('image') === 0) {
+                    const blob = item.getAsFile();
+                    handleUploadedFile(blob);
+                    notify('Gambar dari clipboard berhasil ditempel (pasted)!', 'success');
+                    break;
+                }
+            }
+        });
+
+        // Preset buttons
+        document.getElementById('loadMonsterBtn').onclick = () => {
+            loadCharacterImage('dancing_character_cutout.png', false, 'Monster Bintang');
+            skeletonPins = JSON.parse(JSON.stringify(defaultPins));
+            updateJointListUI();
+        };
+
+        document.getElementById('loadMatisseBtn').onclick = () => {
+            loadCharacterImage('A peek inside the studio_ Studies that make our projects_ (1).jpe', false, 'Penari Matisse');
+            skeletonPins = [
+                { id: 'dancer_top',   name: 'Penari Atas',    u: 0.50, v: 0.28, parent: 'dancer_center', radius: 150 },
+                { id: 'dancer_center',name: 'Pusat Lingkaran',u: 0.51, v: 0.49, parent: null,           radius: 200 },
+                { id: 'dancer_left',  name: 'Penari Kiri',    u: 0.26, v: 0.52, parent: 'dancer_center', radius: 150 },
+                { id: 'dancer_right', name: 'Penari Kanan',   u: 0.78, v: 0.50, parent: 'dancer_center', radius: 150 },
+                { id: 'dancer_bottom',name: 'Penari Lompat',  u: 0.54, v: 0.72, parent: 'dancer_center', radius: 160 }
+            ];
+            updateJointListUI();
+        };
+
+        // Keyboard Shortcuts
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                playToggleBtn.click();
+            } else if (e.code === 'ArrowLeft') {
+                document.getElementById('prevFrameBtn').click();
+            } else if (e.code === 'ArrowRight') {
+                document.getElementById('nextFrameBtn').click();
+            } else if (e.code === 'KeyM') {
+                audioToggleBtn.click();
+            }
+        });
+
+        // Initial setup
+        updateJointListUI();
+        loadCharacterImage('dancing_character_cutout.png', false, 'Monster Bintang');
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
