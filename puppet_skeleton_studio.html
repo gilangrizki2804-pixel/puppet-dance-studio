@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio Skeleton & Tari Karakter — Stop Motion</title>
+    <title>Studio Skeleton & Tari Karakter — Multi-Layer Stop Motion HD</title>
     <style>
         :root {
             --bg-dark: #0a0c10;
@@ -45,22 +45,23 @@
         header {
             text-align: center;
             margin-bottom: 14px;
-            max-width: 860px;
+            max-width: 920px;
         }
 
         .badge-bar {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
             align-items: center;
             margin-bottom: 8px;
+            flex-wrap: wrap;
         }
 
         .badge {
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1px;
             padding: 3px 10px;
             border-radius: 99px;
             background: rgba(245, 158, 11, 0.15);
@@ -72,6 +73,12 @@
             background: rgba(56, 189, 248, 0.15);
             border: 1px solid rgba(56, 189, 248, 0.35);
             color: #38bdf8;
+        }
+
+        .badge-hd {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #34d399;
         }
 
         h1 {
@@ -173,11 +180,11 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 18px;
-            max-width: 1140px;
+            max-width: 1200px;
             width: 100%;
         }
 
-        @media (min-width: 960px) {
+        @media (min-width: 990px) {
             .main-layout {
                 grid-template-columns: 580px 1fr;
                 align-items: start;
@@ -214,12 +221,12 @@
         /* Overlay pills */
         .overlay-pill {
             position: absolute;
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.88);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 8px;
             padding: 4px 10px;
-            font-size: 12px;
+            font-size: 11px;
             font-family: monospace;
             color: #f1f5f9;
             pointer-events: none;
@@ -252,7 +259,7 @@
             bottom: 12px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.88);
+            background: rgba(15, 23, 42, 0.90);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 20px;
@@ -339,7 +346,7 @@
             backdrop-filter: blur(14px);
             border: 1px solid var(--panel-border);
             border-radius: 14px;
-            padding: 18px 20px;
+            padding: 16px 18px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -357,19 +364,155 @@
             align-items: center;
         }
 
+        /* Multi-Layer UI Styles */
+        .layer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 220px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .layer-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .layer-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        .layer-item {
+            background: #141822;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .layer-item:hover {
+            background: #1e2535;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .layer-item.active {
+            background: rgba(245, 158, 11, 0.12);
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+        }
+
+        .layer-thumb-preview {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: #0f131c;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .layer-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .layer-name-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .layer-tags {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .layer-badge {
+            font-size: 9px;
+            font-weight: 600;
+            padding: 1px 5px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.07);
+            color: #94a3b8;
+        }
+
+        .layer-badge.badge-choreo {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .layer-badge.badge-bpm {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .layer-actions {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .layer-icon-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .layer-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+        }
+
+        .layer-icon-btn.vis-off {
+            opacity: 0.4;
+            filter: grayscale(1);
+        }
+
+        .layer-inspector {
+            background: rgba(15, 19, 28, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
         /* Upload Area */
         .upload-dropzone {
             border: 2px dashed rgba(255, 255, 255, 0.22);
             background: rgba(255, 255, 255, 0.02);
             border-radius: 12px;
-            padding: 16px;
+            padding: 12px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .upload-dropzone:hover, .upload-dropzone.dragover {
@@ -378,16 +521,16 @@
         }
 
         .upload-dropzone span.icon {
-            font-size: 26px;
+            font-size: 22px;
         }
 
         .upload-dropzone strong {
-            font-size: 13px;
+            font-size: 12px;
             color: #ffffff;
         }
 
         .upload-dropzone span.hint {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
         }
 
@@ -397,7 +540,7 @@
             align-items: center;
             justify-content: space-between;
             background: #151924;
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 8px;
             font-size: 11px;
             color: #94a3b8;
@@ -413,7 +556,7 @@
             background: #171c26;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            padding: 6px 8px;
+            padding: 5px 8px;
             font-size: 11px;
             color: var(--text-main);
             display: flex;
@@ -434,7 +577,7 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            max-height: 180px;
+            max-height: 170px;
             overflow-y: auto;
             padding-right: 4px;
         }
@@ -443,11 +586,11 @@
             background: #141822;
             border: 1px solid rgba(255, 255, 255, 0.07);
             border-radius: 8px;
-            padding: 8px 12px;
+            padding: 7px 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
             transition: all 0.1s ease;
         }
@@ -471,18 +614,71 @@
             margin-right: 6px;
         }
 
+        .joint-item.is-anchor {
+            border-color: rgba(245, 158, 11, 0.6);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .anchor-pill {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .btn-anchor {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-anchor:hover {
+            filter: brightness(1.15);
+        }
+
+        .subdivide-btn {
+            background: #1e293b;
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            font-weight: 600;
+        }
+
+        .subdivide-btn:hover {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: #38bdf8;
+        }
+
         /* Choreography Selector */
         .choreo-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .choreo-grid::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .choreo-grid::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
         }
 
         .choreo-btn {
             background: #141822;
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 10px;
-            padding: 10px 12px;
+            padding: 9px 11px;
             text-align: left;
             cursor: pointer;
             display: flex;
@@ -503,7 +699,7 @@
         }
 
         .choreo-btn .c-title {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #ffffff;
         }
@@ -528,7 +724,7 @@
         .slider-info {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .slider-info span.val {
@@ -565,7 +761,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
         }
 
@@ -584,7 +780,7 @@
         }
 
         .pill-btn {
-            padding: 5px 10px;
+            padding: 4px 9px;
             border-radius: 16px;
             font-size: 11px;
             background: #141822;
@@ -616,11 +812,12 @@
 
     <header>
         <div class="badge-bar">
-            <span class="badge">Puppet Stop Motion 2D</span>
+            <span class="badge">Multi-Layer Puppet 2D</span>
             <span class="badge badge-bone">Editor Skeleton & Tulang</span>
+            <span class="badge badge-hd">🎬 Full HD 1080p & 5x Auto-Loop</span>
         </div>
         <h1>Studio Skeleton & Tari Karakter</h1>
-        <p class="subtitle">Pasang dan atur sendi/tulang (skeleton) pada bagian tubuh gambar yang ingin digerakkan, lalu buat karakter menari secara bebas dengan ritme stop-motion.</p>
+        <p class="subtitle">Pasang hingga 4 layer karakter (atau lebih), atur BPM dan gerakan masing-masing secara independen, lalu unduh video tarian HD bersih tanpa skeleton dengan auto-loop 5 kali.</p>
     </header>
 
     <!-- Mode Switcher -->
@@ -629,7 +826,7 @@
             <span>🦴</span> 1. Edit Skeleton & Sendi
         </button>
         <button class="tab-btn dance-tab" id="tabDanceMode">
-            <span>💃</span> 2. Mainkan Tarian
+            <span>💃</span> 2. Mainkan Tarian Bersama
         </button>
     </div>
 
@@ -637,15 +834,15 @@
         <!-- Canvas Stage Column -->
         <div class="stage-box">
             <div class="canvas-wrapper" id="canvasWrapper">
-                <canvas id="viewport" width="700" height="700"></canvas>
+                <canvas id="viewport" width="1080" height="1080"></canvas>
                 <div class="overlay-pill top-left-pill" id="frameStatus">Mode: EDIT SKELETON</div>
                 <div class="overlay-pill top-right-pill" id="bpmStatus">
                     <span class="beat-indicator" id="beatDot"></span>
-                    <span id="bpmVal">120 BPM</span>
+                    <span id="bpmVal">Master: 120 BPM · 🔁 5x HD Loop</span>
                 </div>
                 <div class="mode-banner" id="modeBanner">
                     <span id="bannerIcon">📍</span>
-                    <span id="bannerText">Tarik titik sendi (kuning) untuk menyesuaikan dengan posisi tubuh gambar</span>
+                    <span id="bannerText">Pilih layer di sidebar lalu sesuaikan sendi kuningnya</span>
                 </div>
             </div>
 
@@ -655,11 +852,25 @@
                     <button class="btn-accent" id="playToggleBtn">⏸ Jeda</button>
                     <button id="prevFrameBtn" title="Frame Sebelumnya (Panah Kiri)">◀</button>
                     <button id="nextFrameBtn" title="Frame Berikutnya (Panah Kanan)">▶</button>
+                    <button id="audioToggleBtn" title="Aktifkan / Senyapkan Drum Beat">🔊 Beat: AKTIF</button>
                 </div>
                 <div class="btn-row">
-                    <button id="audioToggleBtn">🔊 Beat: AKTIF</button>
-                    <button id="recordVideoBtn">🎥 Rekam Video</button>
-                    <button id="snapshotBtn">📸 Snapshot</button>
+                    <button id="recordMp4Btn" class="btn-accent" style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; font-weight: 700; box-shadow: 0 4px 12px rgba(16,185,129,0.35);" title="Download Video MP4 Kualitas HD 1080p dengan 5x Auto-Loop (Hanya Karakter Bergerak, Tanpa Skeleton)">🎬 Download MP4 (HD 5x Loop)</button>
+                    <button id="recordWebmBtn" title="Download Format Alternatif WebM Kualitas HD 1080p (5x Auto-Loop)">📹 WebM HD</button>
+                    <button id="snapshotBtn" title="Ambil Foto PNG Kualitas HD 1080p Bersih (Tanpa Skeleton)">📸 Snapshot HD</button>
+                </div>
+
+                <!-- Opsi Pilihan Latar Belakang Hasil Unduh -->
+                <div style="width: 100%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-top: 8px; margin-top: 4px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 11px;">
+                    <div style="display: flex; align-items: center; gap: 6px; color: #94a3b8;">
+                        <span style="font-size: 13px;">🏁</span>
+                        <strong>Latar Hasil Unduh (MP4 / WebM / PNG):</strong>
+                    </div>
+                    <div class="pills-group" id="downloadBgPills">
+                        <div class="pill-btn active" data-dlbg="transparent" title="Download dengan background transparan (Alpha channel) — Sempurna untuk WebM & PNG">🏁 Transparan (Alpha)</div>
+                        <div class="pill-btn" data-dlbg="stage" title="Download dengan background panggung studio saat ini">🖼️ Ikuti Panggung</div>
+                        <div class="pill-btn" data-dlbg="green" title="Download dengan layar hijau #00FF00 untuk Chroma Key video editor">🟩 Green Screen</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -667,48 +878,181 @@
         <!-- Sidebar Column -->
         <div class="sidebar">
 
-            <!-- Card 1: Upload Gambar Baru -->
-            <div class="panel-card">
+            <!-- Card 1: Manajemen Lapisan (Multi-Layer) -->
+            <div class="panel-card" id="layerManagementPanel">
                 <div class="card-header">
-                    <span>📤 Unggah Gambar Baru</span>
+                    <span>🎨 Lapisan Karakter (Multi-Layer)</span>
+                    <span id="layerCountBadge" style="color: var(--accent); font-family: monospace; font-size: 11px;">4 Layer Aktif</span>
                 </div>
 
-                <div class="upload-dropzone" id="dropzone">
-                    <span class="icon">📁</span>
-                    <strong>Pilih / Tarik Gambar ke Sini</strong>
-                    <span class="hint">JPG, PNG, WEBP (Bisa juga tekan Ctrl+V untuk Paste gambar)</span>
-                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                <div class="btn-row" style="flex-wrap: wrap;">
+                    <button class="btn-accent" id="addLayerBtn" style="font-size: 11px; padding: 6px 10px;">➕ Tambah Layer</button>
+                    <button id="dupLayerBtn" style="font-size: 11px; padding: 6px 10px;">📋 Duplikat</button>
+                    <button id="deleteLayerBtn" style="font-size: 11px; padding: 6px 10px;" title="Hapus layer yang sedang dipilih">🗑️ Hapus</button>
+                    <button id="resetAllPosBtn" style="font-size: 11px; padding: 6px 10px;" title="Tata ulang posisi karakter">🎯 Tata Ulang</button>
                 </div>
 
-                <div class="file-info-bar" id="fileInfoBar">
-                    <span id="fileNameLabel">Gambar Aktif: dancing_character_cutout.png</span>
-                    <span id="fileDimLabel" style="font-family: monospace;">735 × 937</span>
+                <!-- Layer List Container -->
+                <div class="layer-list" id="layerListContainer">
+                    <!-- Dynamic Layer items inserted by JS -->
                 </div>
 
-                <div class="toggle-row">
-                    <label for="autoBgRemoval" style="cursor: pointer;">✂️ Hapus Latar Belakang Otomatis (Flood Fill)</label>
-                    <input type="checkbox" id="autoBgRemoval" checked>
-                </div>
+                <!-- Active Layer Inspector -->
+                <div class="layer-inspector" id="activeLayerInspector">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 11px; font-weight: 700; color: #fbbf24;">✏️ Pengaturan: <span id="activeLayerInspectorName">Layer 1</span></span>
+                        <input type="text" id="layerNameInput" style="background: #141822; border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 11px; border-radius: 4px; padding: 3px 6px; width: 140px;" placeholder="Nama Layer">
+                    </div>
 
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Preset Gambar Contoh:</div>
-                <div class="preset-images">
-                    <button class="preset-thumb-btn" id="loadMonsterBtn">👾 Monster Bintang</button>
-                    <button class="preset-thumb-btn" id="loadMatisseBtn">🎨 Penari Matisse</button>
+                    <!-- Upload Gambar untuk Layer Aktif -->
+                    <div style="font-size: 11px; font-weight: 600; color: var(--bone-color);">📤 Gambar Layer Ini:</div>
+                    <div class="upload-dropzone" id="layerDropzone">
+                        <span class="icon">📁</span>
+                        <strong>Unggah Gambar Baru untuk Layer Ini</strong>
+                        <span class="hint">JPG, PNG, WEBP (Bisa Drag-Drop atau Tekan Ctrl+V)</span>
+                        <input type="file" id="layerFileInput" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="file-info-bar">
+                        <span id="activeLayerFileName" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px;">Gambar: dancing_character_cutout.png</span>
+                        <span id="activeLayerDim" style="font-family: monospace;">735 × 937</span>
+                    </div>
+
+                    <div class="toggle-row">
+                        <label for="autoBgRemoval" style="cursor: pointer;">✂️ Hapus Background Otomatis</label>
+                        <input type="checkbox" id="autoBgRemoval" checked>
+                    </div>
+
+                    <div style="font-size: 10px; color: var(--text-muted);">Preset Karakter Cepat:</div>
+                    <div class="preset-images">
+                        <button class="preset-thumb-btn" id="loadMonsterBtn">👾 Monster</button>
+                        <button class="preset-thumb-btn" id="loadMatisseBtn">🎨 Matisse</button>
+                        <button class="preset-thumb-btn" id="loadZendorBtn">🏃 Pelompat</button>
+                    </div>
+
+                    <!-- Posisi & Transformasi Panggung -->
+                    <div style="font-size: 11px; font-weight: 600; color: #facc15; margin-top: 4px;">📍 Posisi & Ukuran di Panggung:</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div class="slider-row">
+                            <div class="slider-info">
+                                <span>Geser X</span>
+                                <span class="val" id="layerPosXVal">0 px</span>
+                            </div>
+                            <input type="range" id="layerPosXSlider" min="-450" max="450" value="0" step="5">
+                        </div>
+                        <div class="slider-row">
+                            <div class="slider-info">
+                                <span>Geser Y</span>
+                                <span class="val" id="layerPosYVal">0 px</span>
+                            </div>
+                            <input type="range" id="layerPosYSlider" min="-450" max="450" value="0" step="5">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div class="slider-row">
+                            <div class="slider-info">
+                                <span>Ukuran (Skala)</span>
+                                <span class="val" id="layerScaleVal">100%</span>
+                            </div>
+                            <input type="range" id="layerScaleSlider" min="40" max="180" value="100" step="5">
+                        </div>
+                        <div class="slider-row">
+                            <div class="slider-info">
+                                <span>Transparansi</span>
+                                <span class="val" id="layerOpacityVal">100%</span>
+                            </div>
+                            <input type="range" id="layerOpacitySlider" min="20" max="100" value="100" step="5">
+                        </div>
+                    </div>
+
+                    <div class="toggle-row">
+                        <label for="layerFlipCheckbox" style="cursor: pointer;">🔄 Cermin Horizontal (Flip Arah Kiri/Kanan)</label>
+                        <input type="checkbox" id="layerFlipCheckbox">
+                    </div>
+
+                    <!-- BPM / Kecepatan Layer Ini -->
+                    <div style="font-size: 11px; font-weight: 600; color: #fbbf24; margin-top: 4px;">⚡ BPM & Kecepatan Gerak Layer Ini:</div>
+                    <div class="slider-row">
+                        <div class="slider-info">
+                            <span>Kecepatan Ritme Layer</span>
+                            <span class="val" id="layerBpmVal">120 BPM</span>
+                        </div>
+                        <input type="range" id="layerBpmSlider" min="40" max="240" value="120" step="5">
+                    </div>
                 </div>
             </div>
 
-            <!-- Card 2: Pengaturan Skeleton (Aktif di Mode 1) -->
+            <!-- Card 2: Pilihan Gerakan & Koreografi (Layer Terpilih) -->
+            <div class="panel-card" id="dancePanel">
+                <div class="card-header">
+                    <span>💃 Gerakan Layer: <span id="activeLayerChoreoLabel" style="color: #fbbf24;">Layer 1</span></span>
+                    <span style="font-size: 11px; color: #94a3b8; font-weight: 500;">10 Gerakan</span>
+                </div>
+                <div class="choreo-grid" id="choreoGridContainer">
+                    <div class="choreo-btn" data-choreo="walkCycle">
+                        <span class="c-title">🚶 Berjalan (Walk)</span>
+                        <span class="c-desc">Langkah kaki bergantian, ayunan tangan natural.</span>
+                    </div>
+                    <div class="choreo-btn" data-choreo="runSprint">
+                        <span class="c-title">🏃 Berlari (Run)</span>
+                        <span class="c-desc">Lutut mengangkat tinggi, ayunan tangan bertenaga.</span>
+                    </div>
+                    <div class="choreo-btn" data-choreo="jumpLand">
+                        <span class="c-title">🦘 Melompat (Jump)</span>
+                        <span class="c-desc">Jongkok bersiap, melesat naik, mendarat lentur.</span>
+                    </div>
+                    <div class="choreo-btn" data-choreo="swimming">
+                        <span class="c-title">🏊 Berenang (Swim)</span>
+                        <span class="c-desc">Kayuhan tangan melingkar & ayunan kaki renang.</span>
+                    </div>
+                    <div class="choreo-btn active" data-choreo="funkGroove">
+                        <span class="c-title">🕺 Funk Dance</span>
+                        <span class="c-desc">Goyangan pinggul, irama kepala & kelenturan sendi.</span>
+                    </div>
+                    <div class="choreo-btn" data-choreo="waveGreet">
+                        <span class="c-title">👋 Melambai (Wave)</span>
+                        <span class="c-desc">Tangan melambai ramah menyapa penonton.</span>
+                    </div>
+                    <div class="choreo-btn" data-choreo="yogaStretch">
+                        <span class="c-title">🧘 Peregangan (Stretch)</span>
+                        <span class="c-desc">Merentangkan kedua tangan ke atas & meliuk santai.</span>
+                    </div>
+                    <div class="choreo-btn" data-choreo="cheerClap">
+                        <span class="c-title">👏 Tepuk Tangan (Clap)</span>
+                        <span class="c-desc">Menepuk tangan berirama di depan dada gembira.</span>
+                    </div>
+                    <div class="choreo-btn" data-choreo="circleOrbit">
+                        <span class="c-title">🌀 Tarian Melingkar</span>
+                        <span class="c-desc">Melompat mengitari lintasan melingkar 3D.</span>
+                    </div>
+                    <div class="choreo-btn" data-choreo="bodyWave">
+                        <span class="c-title">🌊 Ombak Tubuh (Wave)</span>
+                        <span class="c-desc">Gelombang tarian mengalir dari kepala ke kaki.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Pengaturan Skeleton (Aktif di Mode 1) -->
             <div class="panel-card" id="skeletonPanel">
                 <div class="card-header">
-                    <span>🦴 Titik Skeleton & Sendi</span>
-                    <span id="pinCountBadge" style="color: var(--bone-color); font-family: monospace;">6 Sendi</span>
+                    <span>🦴 Skeleton: <span id="activeLayerSkeletonTitle" style="color: var(--bone-color);">Layer 1</span></span>
+                    <span id="pinCountBadge" style="color: var(--bone-color); font-family: monospace;">11 Sendi</span>
                 </div>
 
                 <div class="btn-row" style="margin-bottom: 6px; flex-wrap: wrap;">
                     <button class="btn-bone" id="addPinBtn">➕ Tambah Sendi</button>
+                    <button class="subdivide-btn" id="subdivideBtn" title="Bagi garis tulang pada sendi terpilih menjadi 2 segmen sendi fleksibel">⚡ Bagi Sendi (2 Sendi)</button>
+                    <button class="btn-anchor" id="toggleAnchorBtn" title="Jadikan sendi terpilih sebagai Titik Tumpu (Anchor) yang kokoh">⚓ Titik Tumpu</button>
                     <button id="snapSkeletonBtn" title="Posisikan sendi otomatis ke tengah tubuh karakter">🎯 Auto-Snap Tubuh</button>
                     <button id="removePinBtn" title="Hapus sendi yang sedang dipilih">🗑️ Hapus</button>
                     <button id="resetPinsBtn" title="Kembalikan posisi sendi ke default">↺ Reset</button>
+                </div>
+
+                <!-- Info Box Titik Tumpu Aktif -->
+                <div id="anchorStatusBox" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 6px; padding: 6px 10px; margin-bottom: 8px; font-size: 11px; display: flex; align-items: center; justify-content: space-between; color: #fbbf24;">
+                    <span>⚓ <strong>Titik Tumpu:</strong> <span id="activeAnchorName">Kaki Kiri (L-Foot)</span></span>
+                    <button id="quickToggleAnchor" style="padding: 2px 8px; font-size: 10px; background: rgba(245, 158, 11, 0.25); border: 1px solid #f59e0b; color: #fff; border-radius: 4px; cursor: pointer;">Ganti Tumpuan</button>
                 </div>
 
                 <div class="joint-list" id="jointListContainer">
@@ -721,40 +1065,15 @@
                 </div>
             </div>
 
-            <!-- Card 3: Pilihan Tarian (Aktif di Mode 2) -->
-            <div class="panel-card" id="dancePanel">
-                <div class="card-header">
-                    <span>💃 Gaya Koreografi Tarian</span>
-                </div>
-                <div class="choreo-grid">
-                    <div class="choreo-btn active" data-choreo="funkGroove">
-                        <span class="c-title">🕺 Funk Groove</span>
-                        <span class="c-desc">Goyangan pinggul, anggukan kepala & lenturan lutut.</span>
-                    </div>
-                    <div class="choreo-btn" data-choreo="circleOrbit">
-                        <span class="c-title">🌀 Tarian Melingkar</span>
-                        <span class="c-desc">Melompat mengitari lintasan melingkar 3D.</span>
-                    </div>
-                    <div class="choreo-btn" data-choreo="wildJump">
-                        <span class="c-title">🚀 Lompatan Heboh</span>
-                        <span class="c-desc">Melayang tinggi ke udara dan mendarat lentur.</span>
-                    </div>
-                    <div class="choreo-btn" data-choreo="bodyWave">
-                        <span class="c-title">🌊 Ombak Tubuh</span>
-                        <span class="c-desc">Gelombang tarian mengalir dari kepala hingga kaki.</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4: Parameter Gerakan Stop-Motion -->
+            <!-- Card 4: Parameter Gerakan Stop-Motion & Panggung -->
             <div class="panel-card">
                 <div class="card-header">
-                    <span>🎛️ Kendali Stop Motion</span>
+                    <span>🎛️ Kendali Stop Motion Master</span>
                 </div>
 
                 <div class="slider-row">
                     <div class="slider-info">
-                        <span>Kecepatan (FPS)</span>
+                        <span>Master Kecepatan (FPS)</span>
                         <span class="val" id="fpsVal">12 FPS</span>
                     </div>
                     <input type="range" id="fpsSlider" min="4" max="24" value="12" step="1">
@@ -784,12 +1103,18 @@
                     <input type="range" id="boilSlider" min="0" max="25" value="12" step="1">
                 </div>
 
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Panggung:</div>
-                <div class="pills-group">
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Panggung Studio:</div>
+                <div class="pills-group" id="stageBgPills">
                     <div class="pill-btn active" data-bg="paper">Kertas Krem</div>
                     <div class="pill-btn" data-bg="white">Studio Putih</div>
                     <div class="pill-btn" data-bg="dark">Galeri Gelap</div>
                     <div class="pill-btn" data-bg="grid">Kertas Grid</div>
+                    <div class="pill-btn" data-bg="transparent" title="Tampilkan pola kotak catur transparan di panggung">🏁 Transparan</div>
+                </div>
+
+                <div style="background: rgba(16, 185, 129, 0.10); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 8px 10px; font-size: 11px; color: #34d399; margin-top: 4px; display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 16px;">🎬</span>
+                    <span><strong>Full HD 1080p & Auto-Loop 5x:</strong> Video MP4 yang didownload beresolusi 1080p jernih, mengulang tarian 5 putaran penuh, dan bebas dari skeleton.</span>
                 </div>
             </div>
 
@@ -797,20 +1122,20 @@
     </div>
 
     <footer>
-        Klik sendi untuk memilih &middot; Tarik sendi untuk memposisikan &middot; [Spasi] Jeda/Putar &middot; [M] Suara Beat
+        Klik layer untuk mengedit &middot; Tarik sendi untuk memposisikan &middot; [Spasi] Jeda/Putar &middot; [M] Suara Beat
     </footer>
 
     <script>
         // ==========================================
-        // 1. STATE & SKELETON SETUP
+        // 1. DATA STRUCTURE & MULTI-LAYER SETUP
         // ==========================================
         let appMode = 'boneEdit'; // 'boneEdit' or 'dance'
-        let currentChoreo = 'funkGroove';
         let isPlaying = true;
         let fps = 12;
         let currentFrame = 0;
         const totalFrames = 24;
-        let lastFrameTime = 0;
+        let masterFrameTime = 0;
+        let lastFrameTimestamp = 0;
 
         let bounceMultiplier = 1.0;
         let swayMultiplier = 1.0;
@@ -820,35 +1145,68 @@
         let isMuted = false;
 
         let isAddingPin = false;
-        let selectedPinIndex = -1;
         let isDraggingPin = false;
+        let isExportingVideo = false;
 
         const canvas = document.getElementById('viewport');
         const ctx = canvas.getContext('2d');
-        const W = canvas.width;
-        const H = canvas.height;
+        const W = canvas.width;  // 1080px (Full HD)
+        const H = canvas.height; // 1080px (Full HD)
         const ocx = W / 2;
         const ocy = H / 2;
 
-        // Current image loaded
-        let processedCanvas = document.createElement('canvas');
-        let processedCtx = processedCanvas.getContext('2d');
-        let imageLoaded = false;
-        let currentImageName = 'dancing_character_cutout.png';
-
-        // Mesh Resolution for 2D Skinning (16x16 is fast, robust, and looks great)
         const GRID_RES = 16;
 
-        let defaultPins = [
-            { id: 'head',   name: 'Kepala (Head)',        u: 0.52, v: 0.30, parent: 'hips', radius: 160 },
-            { id: 'hips',   name: 'Pinggul (Pelvis)',     u: 0.50, v: 0.52, parent: null,   radius: 180 },
-            { id: 'l_hand', name: 'Tangan Kiri (L-Hand)', u: 0.16, v: 0.12, parent: 'hips', radius: 140 },
-            { id: 'r_hand', name: 'Tangan Kanan (R-Hand)',u: 0.90, v: 0.20, parent: 'hips', radius: 140 },
-            { id: 'l_foot', name: 'Kaki Kiri (L-Foot)',   u: 0.12, v: 0.56, parent: 'hips', radius: 150 },
-            { id: 'r_foot', name: 'Kaki Kanan (R-Foot)',  u: 0.65, v: 0.92, parent: 'hips', radius: 150 }
-        ];
+        function createDefaultPins() {
+            return [
+                { id: 'head',    name: 'Kepala (Head)',        u: 0.52, v: 0.24, parent: 'chest',   radius: 140, isAnchor: false },
+                { id: 'chest',   name: 'Dada (Chest)',         u: 0.50, v: 0.36, parent: 'hips',    radius: 150, isAnchor: false },
+                { id: 'hips',    name: 'Pinggul (Pelvis)',     u: 0.50, v: 0.52, parent: null,      radius: 170, isAnchor: false },
+                { id: 'l_elbow', name: 'Siku Kiri (L-Elbow)',  u: 0.32, v: 0.24, parent: 'chest',   radius: 120, isAnchor: false },
+                { id: 'l_hand',  name: 'Tangan Kiri (L-Hand)', u: 0.16, v: 0.12, parent: 'l_elbow', radius: 120, isAnchor: false },
+                { id: 'r_elbow', name: 'Siku Kanan (R-Elbow)', u: 0.72, v: 0.28, parent: 'chest',   radius: 120, isAnchor: false },
+                { id: 'r_hand',  name: 'Tangan Kanan (R-Hand)',u: 0.90, v: 0.20, parent: 'r_elbow', radius: 120, isAnchor: false },
+                { id: 'l_knee',  name: 'Lutut Kiri (L-Knee)',   u: 0.28, v: 0.68, parent: 'hips',    radius: 130, isAnchor: false },
+                { id: 'l_foot',  name: 'Kaki Kiri (L-Foot)',   u: 0.14, v: 0.88, parent: 'l_knee',  radius: 130, isAnchor: true },
+                { id: 'r_knee',  name: 'Lutut Kanan (R-Knee)',  u: 0.65, v: 0.72, parent: 'hips',    radius: 130, isAnchor: false },
+                { id: 'r_foot',  name: 'Kaki Kanan (R-Foot)',  u: 0.78, v: 0.92, parent: 'r_knee',  radius: 130, isAnchor: false }
+            ];
+        }
 
-        let skeletonPins = JSON.parse(JSON.stringify(defaultPins));
+        class PuppetLayer {
+            constructor(id, name, options = {}) {
+                this.id = id;
+                this.name = name;
+                this.visible = (options.visible !== undefined) ? options.visible : true;
+                this.opacity = (options.opacity !== undefined) ? options.opacity : 1.0;
+                this.posX = options.posX || 0; // px offset relative to stage center
+                this.posY = options.posY || 0;
+                this.scale = (options.scale !== undefined) ? options.scale : 1.0;
+                this.flipH = options.flipH || false;
+
+                this.choreo = options.choreo || 'funkGroove';
+                this.bpm = options.bpm || 120;
+                this.animPhase = 0.0; // 0.0 - 1.0 continuous animation phase
+
+                this.processedCanvas = document.createElement('canvas');
+                this.processedCtx = this.processedCanvas.getContext('2d');
+                this.imageLoaded = false;
+                this.imageName = options.imageName || 'dancing_character_cutout.png';
+
+                this.skeletonPins = options.pins ? JSON.parse(JSON.stringify(options.pins)) : createDefaultPins();
+                this.selectedPinIndex = -1;
+            }
+        }
+
+        let layers = [];
+        let activeLayerIndex = 0;
+
+        function getActiveLayer() {
+            if (activeLayerIndex < 0 || activeLayerIndex >= layers.length) {
+                activeLayerIndex = 0;
+            }
+            return layers[activeLayerIndex];
+        }
 
         // Toast Helper
         let toastTimeout = null;
@@ -869,14 +1227,11 @@
         }
 
         // ==========================================
-        // 2. BULLETPROOF IMAGE LOADER & FLOOD FILL
+        // 2. IMAGE LOADER & FLOOD FILL PER LAYER
         // ==========================================
-        function loadCharacterImage(srcUrl, autoRemoveBg = true, displayName = '') {
-            notify('Membaca gambar...', 'info');
-            imageLoaded = false;
-
+        function loadLayerImage(layer, srcUrl, autoRemoveBg = true, displayName = '') {
+            layer.imageLoaded = false;
             const img = new Image();
-            // Do NOT set crossOrigin for data: URLs (prevents security errors)
             if (!srcUrl.startsWith('data:')) {
                 img.crossOrigin = 'anonymous';
             }
@@ -886,35 +1241,37 @@
                     let w = img.naturalWidth || img.width || 600;
                     let h = img.naturalHeight || img.height || 600;
 
-                    // Constrain maximum working dimension to 800px for speed & stability
-                    const maxDim = 800;
+                    const maxDim = 900;
                     if (w > maxDim || h > maxDim) {
                         const ratio = Math.min(maxDim / w, maxDim / h);
                         w = Math.round(w * ratio);
                         h = Math.round(h * ratio);
                     }
 
-                    processedCanvas.width = w;
-                    processedCanvas.height = h;
-                    processedCtx.clearRect(0, 0, w, h);
-                    processedCtx.drawImage(img, 0, 0, w, h);
+                    layer.processedCanvas.width = w;
+                    layer.processedCanvas.height = h;
+                    layer.processedCtx.clearRect(0, 0, w, h);
+                    layer.processedCtx.drawImage(img, 0, 0, w, h);
 
-                    // Auto background removal if requested
                     if (autoRemoveBg) {
                         try {
-                            removeBackgroundFloodFill(processedCanvas, processedCtx);
+                            removeBackgroundFloodFill(layer.processedCanvas, layer.processedCtx);
                         } catch (bgErr) {
                             console.warn('Flood fill warning:', bgErr);
                         }
                     }
 
-                    currentImageName = displayName || (srcUrl.startsWith('data:') ? 'Gambar Unggahan' : srcUrl);
-                    document.getElementById('fileNameLabel').innerText = 'Gambar: ' + currentImageName;
-                    document.getElementById('fileDimLabel').innerText = `${w} × ${h}`;
+                    layer.imageName = displayName || (srcUrl.startsWith('data:') ? 'Gambar Unggahan' : srcUrl);
+                    layer.imageLoaded = true;
 
-                    imageLoaded = true;
-                    notify('Gambar berhasil dimuat!', 'success');
+                    if (layer === getActiveLayer()) {
+                        document.getElementById('activeLayerFileName').innerText = 'Gambar: ' + layer.imageName;
+                        document.getElementById('activeLayerDim').innerText = `${w} × ${h}`;
+                    }
+
+                    updateLayerListUI();
                     drawStage();
+                    notify(`Gambar untuk ${layer.name} berhasil dimuat!`, 'success');
                 } catch (err) {
                     console.error('Error drawing image to canvas:', err);
                     notify('Gagal memproses gambar: ' + err.message, 'error');
@@ -929,23 +1286,18 @@
             img.src = srcUrl;
         }
 
-        // Fast & Safe Flood Fill Background Removal
         function removeBackgroundFloodFill(c, cCtx) {
             const w = c.width;
             const h = c.height;
             const imgData = cCtx.getImageData(0, 0, w, h);
             const data = imgData.data;
 
-            // Check if already transparent (> 4% transparent pixels)
             let transSample = 0;
             for (let i = 3; i < data.length; i += 40) {
                 if (data[i] < 40) transSample++;
             }
-            if (transSample > (data.length / 40) * 0.04) {
-                return; // Already transparent cutout
-            }
+            if (transSample > (data.length / 40) * 0.04) return;
 
-            // Sample 4 corner colors
             const corners = [0, (w - 1) * 4, (h - 1) * w * 4, ((h - 1) * w + (w - 1)) * 4];
             let avgR = 0, avgG = 0, avgB = 0;
             corners.forEach(idx => {
@@ -953,12 +1305,10 @@
             });
             avgR /= 4; avgG /= 4; avgB /= 4;
 
-            // Pre-allocated typed arrays to prevent heap fragmentation
             const visited = new Uint8Array(w * h);
             const queue = new Int32Array(w * h);
             let head = 0, tail = 0;
 
-            // Seed borders
             for (let x = 0; x < w; x++) {
                 queue[tail++] = x; visited[x] = 1;
                 const bottom = (h - 1) * w + x;
@@ -986,7 +1336,7 @@
                 const diff = Math.abs(r - avgR) + Math.abs(g - avgG) + Math.abs(b - avgB);
 
                 if (diff < threshold * 3 || (r > 225 && g > 225 && b > 225)) {
-                    data[idx + 3] = 0; // Transparent!
+                    data[idx + 3] = 0;
 
                     if (cx > 0 && !visited[pos - 1]) { visited[pos - 1] = 1; queue[tail++] = pos - 1; }
                     if (cx < w - 1 && !visited[pos + 1]) { visited[pos + 1] = 1; queue[tail++] = pos + 1; }
@@ -998,12 +1348,11 @@
             cCtx.putImageData(imgData, 0, 0);
         }
 
-        // Auto-Snap Skeleton onto character body bounds
-        function autoSnapSkeletonToImage() {
-            if (!imageLoaded) return;
-            const w = processedCanvas.width;
-            const h = processedCanvas.height;
-            const imgData = processedCtx.getImageData(0, 0, w, h);
+        function autoSnapSkeletonToLayer(layer) {
+            if (!layer || !layer.imageLoaded) return;
+            const w = layer.processedCanvas.width;
+            const h = layer.processedCanvas.height;
+            const imgData = layer.processedCtx.getImageData(0, 0, w, h);
             const data = imgData.data;
 
             let minX = w, maxX = 0, minY = h, maxY = 0;
@@ -1012,7 +1361,7 @@
             for (let y = 0; y < h; y += 4) {
                 for (let x = 0; x < w; x += 4) {
                     const idx = (y * w + x) * 4;
-                    if (data[idx + 3] > 40) { // Non-transparent pixel
+                    if (data[idx + 3] > 40) {
                         if (x < minX) minX = x;
                         if (x > maxX) maxX = x;
                         if (y < minY) minY = y;
@@ -1036,37 +1385,52 @@
             const spanX = normMaxX - normMinX;
             const spanY = normMaxY - normMinY;
 
-            skeletonPins.forEach(pin => {
+            layer.skeletonPins.forEach(pin => {
                 if (pin.id === 'head') {
                     pin.u = midX;
-                    pin.v = normMinY + spanY * 0.16;
+                    pin.v = normMinY + spanY * 0.14;
+                } else if (pin.id === 'chest') {
+                    pin.u = midX;
+                    pin.v = normMinY + spanY * 0.32;
                 } else if (pin.id === 'hips') {
                     pin.u = midX;
                     pin.v = normMinY + spanY * 0.50;
-                } else if (pin.id === 'l_hand') {
-                    pin.u = normMinX + spanX * 0.10;
+                } else if (pin.id === 'l_elbow') {
+                    pin.u = normMinX + spanX * 0.28;
                     pin.v = normMinY + spanY * 0.22;
-                } else if (pin.id === 'r_hand') {
-                    pin.u = normMaxX - spanX * 0.10;
+                } else if (pin.id === 'l_hand') {
+                    pin.u = normMinX + spanX * 0.08;
+                    pin.v = normMinY + spanY * 0.14;
+                } else if (pin.id === 'r_elbow') {
+                    pin.u = normMaxX - spanX * 0.28;
                     pin.v = normMinY + spanY * 0.25;
+                } else if (pin.id === 'r_hand') {
+                    pin.u = normMaxX - spanX * 0.08;
+                    pin.v = normMinY + spanY * 0.18;
+                } else if (pin.id === 'l_knee') {
+                    pin.u = normMinX + spanX * 0.30;
+                    pin.v = normMinY + spanY * 0.70;
                 } else if (pin.id === 'l_foot') {
-                    pin.u = normMinX + spanX * 0.18;
-                    pin.v = normMaxY - spanY * 0.10;
+                    pin.u = normMinX + spanX * 0.16;
+                    pin.v = normMaxY - spanY * 0.06;
+                } else if (pin.id === 'r_knee') {
+                    pin.u = normMaxX - spanX * 0.30;
+                    pin.v = normMinY + spanY * 0.70;
                 } else if (pin.id === 'r_foot') {
-                    pin.u = normMaxX - spanX * 0.25;
-                    pin.v = normMaxY - spanY * 0.05;
+                    pin.u = normMaxX - spanX * 0.16;
+                    pin.v = normMaxY - spanY * 0.06;
                 }
             });
 
             updateJointListUI();
             drawStage();
-            notify('Sendi berhasil disesuaikan dengan posisi tubuh gambar!', 'success');
+            notify(`Sendi pada ${layer.name} berhasil disesuaikan dengan tubuh gambar!`, 'success');
         }
 
         // ==========================================
         // 3. RBF MESH DEFORMATION
         // ==========================================
-        function computeDeformedVertices(pinTargets, drawWidth, drawHeight) {
+        function computeDeformedVertices(pins, pinTargets, drawWidth, drawHeight) {
             const verts = [];
             const rows = GRID_RES;
             const cols = GRID_RES;
@@ -1082,8 +1446,8 @@
                     let dispX = 0;
                     let dispY = 0;
 
-                    for (let i = 0; i < skeletonPins.length; i++) {
-                        const pin = skeletonPins[i];
+                    for (let i = 0; i < pins.length; i++) {
+                        const pin = pins[i];
                         const target = pinTargets[i];
 
                         const pOrigX = (pin.u - 0.5) * drawWidth;
@@ -1110,7 +1474,7 @@
             return verts;
         }
 
-        function renderMesh(ctx, img, verts, cols, rows, imgW, imgH) {
+        function renderMesh(targetCtx, img, verts, cols, rows, imgW, imgH) {
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {
                     const i0 = r * (cols + 1) + c;
@@ -1118,13 +1482,13 @@
                     const i2 = (r + 1) * (cols + 1) + c;
                     const i3 = i2 + 1;
 
-                    drawTexturedTriangle(ctx, img,
+                    drawTexturedTriangle(targetCtx, img,
                         verts[i0].x, verts[i0].y, verts[i0].u * imgW, verts[i0].v * imgH,
                         verts[i1].x, verts[i1].y, verts[i1].u * imgW, verts[i1].v * imgH,
                         verts[i2].x, verts[i2].y, verts[i2].u * imgW, verts[i2].v * imgH
                     );
 
-                    drawTexturedTriangle(ctx, img,
+                    drawTexturedTriangle(targetCtx, img,
                         verts[i1].x, verts[i1].y, verts[i1].u * imgW, verts[i1].v * imgH,
                         verts[i3].x, verts[i3].y, verts[i3].u * imgW, verts[i3].v * imgH,
                         verts[i2].x, verts[i2].y, verts[i2].u * imgW, verts[i2].v * imgH
@@ -1133,15 +1497,14 @@
             }
         }
 
-        function drawTexturedTriangle(ctx, img, x0, y0, u0, v0, x1, y1, u1, v1, x2, y2, u2, v2) {
+        function drawTexturedTriangle(targetCtx, img, x0, y0, u0, v0, x1, y1, u1, v1, x2, y2, u2, v2) {
             if (!img || !img.width || !img.height) return;
 
             const denom = u0 * (v1 - v2) + u1 * (v2 - v0) + u2 * (v0 - v1);
             if (Math.abs(denom) < 0.0001) return;
 
-            ctx.save();
+            targetCtx.save();
 
-            // Expand triangle slightly by 0.6px from centroid to eliminate seams
             const cx = (x0 + x1 + x2) / 3;
             const cy = (y0 + y1 + y2) / 3;
             const d0 = Math.hypot(x0 - cx, y0 - cy) || 1;
@@ -1154,14 +1517,13 @@
             const px2 = x2 + (x2 - cx) * (0.6 / d2);
             const py2 = y2 + (y2 - cy) * (0.6 / d2);
 
-            ctx.beginPath();
-            ctx.moveTo(px0, py0);
-            ctx.lineTo(px1, py1);
-            ctx.lineTo(px2, py2);
-            ctx.closePath();
-            ctx.clip();
+            targetCtx.beginPath();
+            targetCtx.moveTo(px0, py0);
+            targetCtx.lineTo(px1, py1);
+            targetCtx.lineTo(px2, py2);
+            targetCtx.closePath();
+            targetCtx.clip();
 
-            // Mathematically exact affine transformation: (u,v,1) -> (x,y,1)
             const a = (x0 * (v1 - v2) + x1 * (v2 - v0) + x2 * (v0 - v1)) / denom;
             const b = (y0 * (v1 - v2) + y1 * (v2 - v0) + y2 * (v0 - v1)) / denom;
             const c = (x0 * (u2 - u1) + x1 * (u0 - u2) + x2 * (u1 - u0)) / denom;
@@ -1169,22 +1531,26 @@
             const e = (x0 * (u1 * v2 - u2 * v1) + x1 * (u2 * v0 - u0 * v2) + x2 * (u0 * v1 - u1 * v0)) / denom;
             const f = (y0 * (u1 * v2 - u2 * v1) + y1 * (u2 * v0 - u0 * v2) + y2 * (u0 * v1 - u1 * v0)) / denom;
 
-            ctx.transform(a, b, c, d, e, f);
-            ctx.drawImage(img, 0, 0);
-            ctx.restore();
+            targetCtx.transform(a, b, c, d, e, f);
+            targetCtx.drawImage(img, 0, 0);
+            targetCtx.restore();
         }
 
         // ==========================================
-        // 4. ANIMATION PROCEDURAL CHOREOGRAPHY
+        // 4. PROCEDURAL CHOREOGRAPHY FOR LAYER
         // ==========================================
-        function getAnimatedPinTargets(frameIdx, drawWidth, drawHeight) {
-            const t = frameIdx / totalFrames;
+        function getAnimatedPinTargetsForLayer(layer, drawWidth, drawHeight) {
+            const t = layer.animPhase;
             const cycleRad = t * 2 * Math.PI;
+            const choreo = layer.choreo;
+
+            const bounce = bounceMultiplier;
+            const sway = swayMultiplier;
 
             const targets = [];
 
-            for (let i = 0; i < skeletonPins.length; i++) {
-                const pin = skeletonPins[i];
+            for (let i = 0; i < layer.skeletonPins.length; i++) {
+                const pin = layer.skeletonPins[i];
                 const baseOriginX = (pin.u - 0.5) * drawWidth;
                 const baseOriginY = (pin.v - 0.5) * drawHeight;
 
@@ -1192,56 +1558,274 @@
                 let offY = 0;
 
                 if (appMode === 'dance') {
-                    if (currentChoreo === 'funkGroove') {
-                        const bouncePhase = cycleRad * 2;
-                        const swayX = Math.sin(cycleRad) * 35 * swayMultiplier;
-                        const jumpY = Math.max(0, -Math.cos(bouncePhase)) * 24 * bounceMultiplier;
-                        const squashY = Math.cos(bouncePhase) * 16 * bounceMultiplier;
+                    if (choreo === 'walkCycle') {
+                        // 1. BERJALAN
+                        const walkSpeed = cycleRad;
+                        const pelvisBob = -Math.abs(Math.sin(walkSpeed)) * 14 * bounce;
+                        const hipSway = Math.sin(walkSpeed) * 14 * sway;
+                        const lPhase = walkSpeed;
+                        const rPhase = walkSpeed + Math.PI;
 
                         if (pin.id === 'hips') {
-                            offX = swayX * 0.8;
-                            offY = -jumpY + squashY * 0.6;
+                            offX = hipSway * 0.7; offY = pelvisBob;
+                        } else if (pin.id === 'chest') {
+                            offX = -hipSway * 0.4; offY = pelvisBob * 0.8;
                         } else if (pin.id === 'head') {
-                            offX = swayX * 1.2 + Math.sin(cycleRad) * 18;
-                            offY = -jumpY - squashY * 0.4;
-                        } else if (pin.id === 'l_hand') {
-                            offX = swayX + Math.sin(cycleRad * 2) * 25;
-                            offY = -jumpY - Math.cos(cycleRad) * 35;
-                        } else if (pin.id === 'r_hand') {
-                            offX = swayX + Math.cos(cycleRad * 2) * 25;
-                            offY = -jumpY + Math.sin(cycleRad) * 35;
+                            offX = -hipSway * 0.2; offY = pelvisBob * 0.7;
+                        } else if (pin.id === 'l_knee') {
+                            offX = Math.sin(lPhase) * 22 * sway;
+                            offY = pelvisBob - Math.max(0, Math.sin(lPhase)) * 28 * bounce;
                         } else if (pin.id === 'l_foot') {
-                            offX = swayX * 0.4;
-                            offY = Math.sin(bouncePhase) * 20 * bounceMultiplier;
+                            offX = Math.sin(lPhase) * 36 * sway;
+                            offY = pelvisBob - Math.max(0, Math.sin(lPhase)) * 24 * bounce;
+                        } else if (pin.id === 'r_knee') {
+                            offX = Math.sin(rPhase) * 22 * sway;
+                            offY = pelvisBob - Math.max(0, Math.sin(rPhase)) * 28 * bounce;
                         } else if (pin.id === 'r_foot') {
-                            offX = swayX * 0.4;
-                            offY = -Math.sin(bouncePhase) * 20 * bounceMultiplier;
+                            offX = Math.sin(rPhase) * 36 * sway;
+                            offY = pelvisBob - Math.max(0, Math.sin(rPhase)) * 24 * bounce;
+                        } else if (pin.id === 'l_elbow') {
+                            offX = Math.sin(rPhase) * 18 * sway;
+                            offY = pelvisBob - Math.max(0, Math.sin(rPhase)) * 12;
+                        } else if (pin.id === 'l_hand') {
+                            offX = Math.sin(rPhase) * 32 * sway;
+                            offY = pelvisBob - Math.cos(rPhase) * 14;
+                        } else if (pin.id === 'r_elbow') {
+                            offX = Math.sin(lPhase) * 18 * sway;
+                            offY = pelvisBob - Math.max(0, Math.sin(lPhase)) * 12;
+                        } else if (pin.id === 'r_hand') {
+                            offX = Math.sin(lPhase) * 32 * sway;
+                            offY = pelvisBob - Math.cos(lPhase) * 14;
                         } else {
-                            offX = swayX;
-                            offY = -jumpY;
+                            offX = hipSway * 0.5; offY = pelvisBob;
                         }
-                    } else if (currentChoreo === 'circleOrbit') {
-                        const orbitX = Math.sin(cycleRad) * 110 * swayMultiplier;
+                    } else if (choreo === 'runSprint') {
+                        // 2. BERLARI
+                        const runSpeed = cycleRad;
+                        const runFlight = Math.sin(runSpeed * 2) * 22 * bounce;
+                        const runLeanX = 14 * sway;
+                        const lPhase = runSpeed;
+                        const rPhase = runSpeed + Math.PI;
+
+                        if (pin.id === 'hips') {
+                            offX = runLeanX * 0.5 + Math.sin(runSpeed) * 8; offY = -runFlight;
+                        } else if (pin.id === 'chest') {
+                            offX = runLeanX * 0.9 - Math.sin(runSpeed) * 6; offY = -runFlight - 4;
+                        } else if (pin.id === 'head') {
+                            offX = runLeanX * 1.1; offY = -runFlight - 2;
+                        } else if (pin.id === 'l_knee') {
+                            offX = runLeanX + Math.sin(lPhase) * 32 * sway;
+                            offY = -runFlight - Math.max(0, Math.sin(lPhase)) * 44 * bounce;
+                        } else if (pin.id === 'l_foot') {
+                            offX = runLeanX + Math.sin(lPhase) * 48 * sway;
+                            offY = -runFlight - Math.max(0, Math.sin(lPhase)) * 38 * bounce;
+                        } else if (pin.id === 'r_knee') {
+                            offX = runLeanX + Math.sin(rPhase) * 32 * sway;
+                            offY = -runFlight - Math.max(0, Math.sin(rPhase)) * 44 * bounce;
+                        } else if (pin.id === 'r_foot') {
+                            offX = runLeanX + Math.sin(rPhase) * 48 * sway;
+                            offY = -runFlight - Math.max(0, Math.sin(rPhase)) * 38 * bounce;
+                        } else if (pin.id === 'l_elbow') {
+                            offX = runLeanX + Math.sin(rPhase) * 28 * sway; offY = -runFlight - 10;
+                        } else if (pin.id === 'l_hand') {
+                            offX = runLeanX + Math.sin(rPhase) * 45 * sway; offY = -runFlight - Math.cos(rPhase) * 22;
+                        } else if (pin.id === 'r_elbow') {
+                            offX = runLeanX + Math.sin(lPhase) * 28 * sway; offY = -runFlight - 10;
+                        } else if (pin.id === 'r_hand') {
+                            offX = runLeanX + Math.sin(lPhase) * 45 * sway; offY = -runFlight - Math.cos(lPhase) * 22;
+                        } else {
+                            offX = runLeanX; offY = -runFlight;
+                        }
+                    } else if (choreo === 'jumpLand') {
+                        // 3. MELOMPAT
+                        let jumpY = 0, tuckKnee = 0, armLift = 0;
+                        if (t < 0.25) {
+                            const crouchProg = Math.sin((t / 0.25) * Math.PI);
+                            jumpY = crouchProg * 35 * bounce;
+                            tuckKnee = crouchProg * 15;
+                            armLift = -crouchProg * 15;
+                        } else if (t < 0.65) {
+                            const airProg = (t - 0.25) / 0.40;
+                            const arc = Math.sin(airProg * Math.PI);
+                            jumpY = -arc * 95 * bounce;
+                            tuckKnee = -arc * 25;
+                            armLift = arc * 50;
+                        } else {
+                            const landProg = Math.sin(((t - 0.65) / 0.35) * Math.PI);
+                            jumpY = landProg * 26 * bounce;
+                            tuckKnee = landProg * 12;
+                            armLift = 0;
+                        }
+
+                        if (pin.id === 'hips') {
+                            offY = jumpY; offX = Math.sin(cycleRad) * 6 * sway;
+                        } else if (pin.id === 'chest' || pin.id === 'head') {
+                            offY = jumpY * 0.95; offX = Math.sin(cycleRad) * 8 * sway;
+                        } else if (pin.id.includes('knee')) {
+                            offY = jumpY * 0.6 + tuckKnee; offX = (pin.id.startsWith('l') ? -10 : 10);
+                        } else if (pin.id.includes('foot')) {
+                            offY = jumpY * 0.4; offX = 0;
+                        } else if (pin.id.includes('elbow')) {
+                            offY = jumpY - armLift * 0.6; offX = (pin.id.startsWith('l') ? -15 : 15);
+                        } else if (pin.id.includes('hand')) {
+                            offY = jumpY - armLift; offX = (pin.id.startsWith('l') ? -25 : 25);
+                        } else {
+                            offY = jumpY * 0.8;
+                        }
+                    } else if (choreo === 'swimming') {
+                        // 4. BERENANG
+                        const swimUndulate = Math.sin(cycleRad * 2) * 16 * bounce;
+                        const swimSway = Math.cos(cycleRad) * 18 * sway;
+
+                        if (pin.id === 'hips') {
+                            offX = swimSway * 0.6; offY = swimUndulate * 0.7;
+                        } else if (pin.id === 'chest') {
+                            offX = swimSway; offY = swimUndulate * 0.9;
+                        } else if (pin.id === 'head') {
+                            offX = swimSway * 1.2; offY = swimUndulate - 10;
+                        } else if (pin.id === 'l_hand') {
+                            offX = -Math.cos(cycleRad) * 42 * sway; offY = swimUndulate + Math.sin(cycleRad) * 36;
+                        } else if (pin.id === 'l_elbow') {
+                            offX = -Math.cos(cycleRad) * 26 * sway; offY = swimUndulate + Math.sin(cycleRad - 0.4) * 24;
+                        } else if (pin.id === 'r_hand') {
+                            offX = -Math.cos(cycleRad + Math.PI) * 42 * sway; offY = swimUndulate + Math.sin(cycleRad + Math.PI) * 36;
+                        } else if (pin.id === 'r_elbow') {
+                            offX = -Math.cos(cycleRad + Math.PI) * 26 * sway; offY = swimUndulate + Math.sin(cycleRad + Math.PI - 0.4) * 24;
+                        } else if (pin.id === 'l_knee') {
+                            offY = swimUndulate + Math.sin(cycleRad * 4) * 18 * bounce;
+                        } else if (pin.id === 'l_foot') {
+                            offY = swimUndulate + Math.sin(cycleRad * 4 - 0.5) * 25 * bounce;
+                        } else if (pin.id === 'r_knee') {
+                            offY = swimUndulate - Math.sin(cycleRad * 4) * 18 * bounce;
+                        } else if (pin.id === 'r_foot') {
+                            offY = swimUndulate - Math.sin(cycleRad * 4 - 0.5) * 25 * bounce;
+                        } else {
+                            offX = swimSway * 0.5; offY = swimUndulate * 0.6;
+                        }
+                    } else if (choreo === 'waveGreet') {
+                        // 5. MELAMBAI
+                        const idleShift = Math.sin(cycleRad) * 8 * sway;
+                        const idleBob = Math.sin(cycleRad * 2) * 5 * bounce;
+
+                        if (pin.id === 'hips') {
+                            offX = idleShift * 0.6; offY = idleBob;
+                        } else if (pin.id === 'chest') {
+                            offX = idleShift * 0.9; offY = idleBob;
+                        } else if (pin.id === 'head') {
+                            offX = idleShift + Math.sin(cycleRad * 2) * 8; offY = idleBob - 2;
+                        } else if (pin.id === 'r_elbow') {
+                            offX = 22 * sway; offY = -35 + Math.sin(cycleRad * 4) * 5;
+                        } else if (pin.id === 'r_hand') {
+                            offX = 35 + Math.sin(cycleRad * 4) * 28 * sway; offY = -75 + Math.cos(cycleRad * 4) * 8;
+                        } else if (pin.id === 'l_elbow' || pin.id === 'l_hand') {
+                            offX = idleShift * 0.4; offY = idleBob + 6;
+                        } else if (pin.id.includes('foot') || pin.id.includes('knee')) {
+                            offX = idleShift * 0.2; offY = idleBob * 0.3;
+                        } else {
+                            offX = idleShift * 0.5; offY = idleBob;
+                        }
+                    } else if (choreo === 'yogaStretch') {
+                        // 6. PEREGANGAN
+                        const reachPhase = Math.sin(cycleRad);
+                        const stretchY = reachPhase * 22 * bounce;
+                        const arcSideX = Math.sin(cycleRad) * 26 * sway;
+
+                        if (pin.id === 'hips') {
+                            offX = arcSideX * 0.3; offY = -stretchY * 0.5;
+                        } else if (pin.id === 'chest') {
+                            offX = arcSideX * 0.7; offY = -stretchY * 0.8;
+                        } else if (pin.id === 'head') {
+                            offX = arcSideX * 0.9; offY = -stretchY - 6;
+                        } else if (pin.id === 'l_elbow') {
+                            offX = arcSideX - 15; offY = -stretchY - 45;
+                        } else if (pin.id === 'l_hand') {
+                            offX = arcSideX - 10; offY = -stretchY - 72;
+                        } else if (pin.id === 'r_elbow') {
+                            offX = arcSideX + 15; offY = -stretchY - 45;
+                        } else if (pin.id === 'r_hand') {
+                            offX = arcSideX + 10; offY = -stretchY - 72;
+                        } else if (pin.id.includes('knee') || pin.id.includes('foot')) {
+                            offX = arcSideX * 0.15; offY = -stretchY * 0.2;
+                        } else {
+                            offX = arcSideX * 0.5; offY = -stretchY * 0.6;
+                        }
+                    } else if (choreo === 'cheerClap') {
+                        // 7. TEPUK TANGAN
+                        const cheerHop = -Math.max(0, Math.sin(cycleRad * 2)) * 24 * bounce;
+                        const clapProg = Math.sin(cycleRad * 4);
+                        const clapInX = clapProg > 0 ? 12 : 36;
+
+                        if (pin.id === 'hips') {
+                            offX = 0; offY = cheerHop;
+                        } else if (pin.id === 'chest') {
+                            offX = 0; offY = cheerHop - 4;
+                        } else if (pin.id === 'head') {
+                            offX = Math.sin(cycleRad * 4) * 5; offY = cheerHop - 8;
+                        } else if (pin.id === 'l_elbow') {
+                            offX = -clapInX * 0.7; offY = cheerHop - 22;
+                        } else if (pin.id === 'l_hand') {
+                            offX = (clapProg > 0 ? 6 : -26); offY = cheerHop - 30;
+                        } else if (pin.id === 'r_elbow') {
+                            offX = clapInX * 0.7; offY = cheerHop - 22;
+                        } else if (pin.id === 'r_hand') {
+                            offX = (clapProg > 0 ? -6 : 26); offY = cheerHop - 30;
+                        } else if (pin.id.includes('knee')) {
+                            offY = cheerHop * 0.7;
+                        } else if (pin.id.includes('foot')) {
+                            offY = cheerHop * 0.4;
+                        } else {
+                            offY = cheerHop * 0.7;
+                        }
+                    } else if (choreo === 'funkGroove') {
+                        // 8. FUNK GROOVE
+                        const bouncePhase = cycleRad * 2;
+                        const swayX = Math.sin(cycleRad) * 36 * sway;
+                        const jumpY = Math.max(0, -Math.cos(bouncePhase)) * 26 * bounce;
+                        const squashY = Math.cos(bouncePhase) * 16 * bounce;
+
+                        if (pin.id === 'hips') {
+                            offX = swayX * 0.85; offY = -jumpY + squashY * 0.7;
+                        } else if (pin.id === 'chest') {
+                            offX = -swayX * 0.45; offY = -jumpY * 0.9;
+                        } else if (pin.id === 'head') {
+                            offX = swayX * 1.2 + Math.sin(cycleRad) * 18; offY = -jumpY * 0.8 - squashY * 0.4;
+                        } else if (pin.id === 'l_elbow') {
+                            offX = swayX * 0.6 + Math.sin(cycleRad * 2) * 18; offY = -jumpY - Math.cos(cycleRad) * 20;
+                        } else if (pin.id === 'l_hand') {
+                            offX = swayX * 1.1 + Math.sin(cycleRad * 2 + 0.5) * 36; offY = -jumpY - Math.cos(cycleRad) * 38;
+                        } else if (pin.id === 'r_elbow') {
+                            offX = swayX * 0.6 + Math.cos(cycleRad * 2) * 18; offY = -jumpY + Math.sin(cycleRad) * 20;
+                        } else if (pin.id === 'r_hand') {
+                            offX = swayX * 1.1 + Math.cos(cycleRad * 2 + 0.5) * 36; offY = -jumpY + Math.sin(cycleRad) * 38;
+                        } else if (pin.id === 'l_knee') {
+                            offX = swayX * 0.5 + 8; offY = Math.sin(bouncePhase) * 24 * bounce;
+                        } else if (pin.id === 'l_foot') {
+                            offX = swayX * 0.3; offY = Math.sin(bouncePhase - 0.4) * 22 * bounce;
+                        } else if (pin.id === 'r_knee') {
+                            offX = swayX * 0.5 - 8; offY = -Math.sin(bouncePhase) * 24 * bounce;
+                        } else if (pin.id === 'r_foot') {
+                            offX = swayX * 0.3; offY = -Math.sin(bouncePhase - 0.4) * 22 * bounce;
+                        } else {
+                            offX = swayX * 0.7 + Math.sin(cycleRad + (pin.v * 3)) * 14; offY = -jumpY * 0.7;
+                        }
+                    } else if (choreo === 'circleOrbit') {
+                        // 9. TARIAN MELINGKAR
+                        const orbitX = Math.sin(cycleRad) * 110 * sway;
                         const orbitY = Math.cos(cycleRad) * 60;
                         const hopWave = Math.cos(cycleRad * 4);
-                        const hopY = Math.max(0, -hopWave) * 18 * bounceMultiplier;
+                        const hopY = Math.max(0, -hopWave) * 18 * bounce;
                         const tilt = Math.cos(cycleRad) * 25;
 
                         offX = orbitX + (pin.u - 0.5) * tilt;
                         offY = orbitY - hopY;
-                    } else if (currentChoreo === 'wildJump') {
-                        const jumpHeight = Math.max(0, -Math.sin(cycleRad)) * 85 * bounceMultiplier;
-                        const spinSway = Math.sin(cycleRad * 2) * 40 * swayMultiplier;
-
-                        offX = spinSway;
-                        offY = -jumpHeight;
-                        if (pin.id === 'l_hand' || pin.id === 'r_hand') {
-                            offY -= Math.sin(cycleRad) * 40;
+                        if (pin.id.includes('elbow') || pin.id.includes('knee')) {
+                            offX += Math.sin(cycleRad * 2) * 12;
                         }
-                    } else if (currentChoreo === 'bodyWave') {
-                        const wavePhase = cycleRad + (pin.v * Math.PI * 2.5);
-                        offX = Math.sin(wavePhase) * 45 * swayMultiplier;
-                        offY = Math.cos(wavePhase) * 15 * bounceMultiplier;
+                    } else if (choreo === 'bodyWave') {
+                        // 10. OMBAK TUBUH
+                        const wavePhase = cycleRad + (pin.v * Math.PI * 2.8);
+                        offX = Math.sin(wavePhase) * 48 * sway;
+                        offY = Math.cos(wavePhase) * 16 * bounce;
                     }
                 }
 
@@ -1251,101 +1835,189 @@
                 });
             }
 
+            // ANCHOR CONSTRAINT (TITIK TUMPU)
+            const anchorIndices = [];
+            for (let i = 0; i < layer.skeletonPins.length; i++) {
+                if (layer.skeletonPins[i].isAnchor) anchorIndices.push(i);
+            }
+
+            if (anchorIndices.length > 0 && appMode === 'dance') {
+                let totalAnchorDispX = 0;
+                let totalAnchorDispY = 0;
+
+                for (const idx of anchorIndices) {
+                    const pin = layer.skeletonPins[idx];
+                    const baseOriginX = (pin.u - 0.5) * drawWidth;
+                    const baseOriginY = (pin.v - 0.5) * drawHeight;
+                    totalAnchorDispX += (targets[idx].x - baseOriginX);
+                    totalAnchorDispY += (targets[idx].y - baseOriginY);
+                }
+
+                const avgDispX = totalAnchorDispX / anchorIndices.length;
+                const avgDispY = totalAnchorDispY / anchorIndices.length;
+
+                for (let i = 0; i < targets.length; i++) {
+                    targets[i].x -= avgDispX;
+                    targets[i].y -= avgDispY;
+                }
+
+                for (const idx of anchorIndices) {
+                    const pin = layer.skeletonPins[idx];
+                    targets[idx].x = (pin.u - 0.5) * drawWidth;
+                    targets[idx].y = (pin.v - 0.5) * drawHeight;
+                }
+            }
+
             return targets;
         }
 
         // ==========================================
-        // 5. STAGE DRAWING
+        // 5. STAGE DRAWING PIPELINE (MULTI-LAYER)
         // ==========================================
-        function drawBackground() {
-            if (stageBg === 'paper') {
-                ctx.fillStyle = '#faf9f5';
-                ctx.fillRect(0, 0, W, H);
-            } else if (stageBg === 'white') {
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, W, H);
-            } else if (stageBg === 'dark') {
-                ctx.fillStyle = '#11141c';
-                ctx.fillRect(0, 0, W, H);
-            } else if (stageBg === 'grid') {
-                ctx.fillStyle = '#faf9f5';
-                ctx.fillRect(0, 0, W, H);
-                ctx.strokeStyle = 'rgba(0, 0, 0, 0.06)';
-                ctx.lineWidth = 1;
-                for (let x = 0; x < W; x += 25) {
-                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+        let downloadBgMode = 'transparent'; // 'transparent', 'stage', 'green'
+
+        function drawBackground(targetCtx, targetW, targetH, isExport = false) {
+            if (isExport) {
+                if (downloadBgMode === 'transparent') {
+                    targetCtx.clearRect(0, 0, targetW, targetH);
+                    return;
+                } else if (downloadBgMode === 'green') {
+                    targetCtx.fillStyle = '#00ff00';
+                    targetCtx.fillRect(0, 0, targetW, targetH);
+                    return;
                 }
-                for (let y = 0; y < H; y += 25) {
-                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+                // Jika 'stage', lanjutkan ke render background panggung aktif
+            }
+
+            if (stageBg === 'transparent') {
+                targetCtx.clearRect(0, 0, targetW, targetH);
+                const sz = 30;
+                for (let y = 0; y < targetH; y += sz) {
+                    for (let x = 0; x < targetW; x += sz) {
+                        targetCtx.fillStyle = ((Math.floor(x / sz) + Math.floor(y / sz)) % 2 === 0) ? '#ffffff' : '#e2e8f0';
+                        targetCtx.fillRect(x, y, sz, sz);
+                    }
+                }
+                return;
+            }
+
+            if (stageBg === 'paper') {
+                targetCtx.fillStyle = '#faf9f5';
+                targetCtx.fillRect(0, 0, targetW, targetH);
+            } else if (stageBg === 'white') {
+                targetCtx.fillStyle = '#ffffff';
+                targetCtx.fillRect(0, 0, targetW, targetH);
+            } else if (stageBg === 'dark') {
+                targetCtx.fillStyle = '#11141c';
+                targetCtx.fillRect(0, 0, targetW, targetH);
+            } else if (stageBg === 'grid') {
+                targetCtx.fillStyle = '#faf9f5';
+                targetCtx.fillRect(0, 0, targetW, targetH);
+                targetCtx.strokeStyle = 'rgba(0, 0, 0, 0.06)';
+                targetCtx.lineWidth = 1;
+                for (let x = 0; x < targetW; x += 35) {
+                    targetCtx.beginPath(); targetCtx.moveTo(x, 0); targetCtx.lineTo(x, targetH); targetCtx.stroke();
+                }
+                for (let y = 0; y < targetH; y += 35) {
+                    targetCtx.beginPath(); targetCtx.moveTo(0, y); targetCtx.lineTo(targetW, y); targetCtx.stroke();
                 }
             }
         }
 
-        function drawStage() {
-            drawBackground();
+        function drawStage(targetCtx = ctx, targetW = W, targetH = H, exportMode = isExportingVideo) {
+            drawBackground(targetCtx, targetW, targetH, exportMode);
 
-            if (!imageLoaded) {
-                ctx.fillStyle = '#94a3b8';
-                ctx.font = '14px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText('Memuat gambar karakter...', ocx, ocy);
-                return;
-            }
+            const activeLayer = getActiveLayer();
 
-            const scale = Math.min((W * 0.75) / processedCanvas.width, (H * 0.75) / processedCanvas.height);
-            const drawW = processedCanvas.width * scale;
-            const drawH = processedCanvas.height * scale;
+            // Render all visible layers in back-to-front stack order
+            for (let lIdx = 0; lIdx < layers.length; lIdx++) {
+                const layer = layers[lIdx];
+                if (!layer.visible || !layer.imageLoaded) continue;
 
-            const jx = (appMode === 'dance') ? (Math.random() * 2 - 1) * (boilIntensity * 0.1) : 0;
-            const jy = (appMode === 'dance') ? (Math.random() * 2 - 1) * (boilIntensity * 0.1) : 0;
+                const baseScale = Math.min((targetW * 0.70) / layer.processedCanvas.width, (targetH * 0.70) / layer.processedCanvas.height);
+                const drawW = layer.processedCanvas.width * baseScale * layer.scale;
+                const drawH = layer.processedCanvas.height * baseScale * layer.scale;
 
-            const pinTargets = getAnimatedPinTargets(currentFrame, drawW, drawH);
+                // Center position on stage + layer offset
+                const layerCenterX = (targetW / 2) + layer.posX;
+                const layerCenterY = (targetH / 2) + layer.posY;
 
-            if (appMode === 'dance') {
-                // Draw shadow
-                ctx.save();
-                ctx.fillStyle = stageBg === 'dark' ? 'rgba(0,0,0,0.6)' : 'rgba(30, 30, 40, 0.22)';
-                const hipTarget = pinTargets.find((p, i) => skeletonPins[i].id === 'hips') || { x: 0, y: 0 };
-                ctx.beginPath();
-                ctx.ellipse(ocx + hipTarget.x * 0.7, ocy + drawH * 0.42, 70, 16, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
+                const jx = (appMode === 'dance') ? (Math.random() * 2 - 1) * (boilIntensity * 0.1) : 0;
+                const jy = (appMode === 'dance') ? (Math.random() * 2 - 1) * (boilIntensity * 0.1) : 0;
 
-                // Draw deformed mesh
-                ctx.save();
-                ctx.translate(ocx + jx, ocy + jy);
-                try {
-                    const meshVerts = computeDeformedVertices(pinTargets, drawW, drawH);
-                    renderMesh(ctx, processedCanvas, meshVerts, GRID_RES, GRID_RES, processedCanvas.width, processedCanvas.height);
-                } catch (meshErr) {
-                    console.error('Mesh render error:', meshErr);
-                    // Safe Fallback: draw directly so image never disappears!
-                    ctx.drawImage(processedCanvas, -drawW / 2, -drawH / 2, drawW, drawH);
+                const pinTargets = getAnimatedPinTargetsForLayer(layer, drawW, drawH);
+
+                if (appMode === 'dance') {
+                    // Draw contact shadow on ground (omit if pure transparent export so character cutout is completely clean)
+                    const skipShadow = exportMode && (downloadBgMode === 'transparent');
+                    if (!skipShadow) {
+                        targetCtx.save();
+                        targetCtx.fillStyle = (stageBg === 'dark' || (exportMode && downloadBgMode === 'green')) ? 'rgba(0,0,0,0.65)' : 'rgba(30, 30, 40, 0.22)';
+                        targetCtx.globalAlpha = layer.opacity * 0.8;
+                        const hipTarget = pinTargets.find((p, i) => layer.skeletonPins[i].id === 'hips') || { x: 0, y: 0 };
+                        targetCtx.beginPath();
+                        const shadowFlip = layer.flipH ? -1 : 1;
+                        targetCtx.ellipse(layerCenterX + (hipTarget.x * shadowFlip * 0.7), layerCenterY + (drawH * 0.42), 65 * layer.scale, 16 * layer.scale, 0, 0, Math.PI * 2);
+                        targetCtx.fill();
+                        targetCtx.restore();
+                    }
+
+                    // Draw deformed mesh
+                    targetCtx.save();
+                    targetCtx.globalAlpha = layer.opacity;
+                    targetCtx.translate(layerCenterX + jx, layerCenterY + jy);
+                    if (layer.flipH) {
+                        targetCtx.scale(-1, 1);
+                    }
+
+                    try {
+                        const meshVerts = computeDeformedVertices(layer.skeletonPins, pinTargets, drawW, drawH);
+                        renderMesh(targetCtx, layer.processedCanvas, meshVerts, GRID_RES, GRID_RES, layer.processedCanvas.width, layer.processedCanvas.height);
+                    } catch (meshErr) {
+                        targetCtx.drawImage(layer.processedCanvas, -drawW / 2, -drawH / 2, drawW, drawH);
+                    }
+                    targetCtx.restore();
+                } else {
+                    // Edit Mode: active layer is crisp and interactive, other layers shown faintly
+                    targetCtx.save();
+                    targetCtx.globalAlpha = (layer === activeLayer) ? 1.0 : 0.45;
+                    targetCtx.translate(layerCenterX, layerCenterY);
+                    if (layer.flipH) targetCtx.scale(-1, 1);
+                    targetCtx.drawImage(layer.processedCanvas, -drawW / 2, -drawH / 2, drawW, drawH);
+                    targetCtx.restore();
                 }
-                ctx.restore();
-            } else {
-                // In Edit Mode: Draw REST POSE directly (super crisp and fast!)
-                ctx.save();
-                ctx.translate(ocx, ocy);
-                ctx.drawImage(processedCanvas, -drawW / 2, -drawH / 2, drawW, drawH);
-                ctx.restore();
             }
 
-            // Draw skeleton pins and lines overlay
-            if (showBones || appMode === 'boneEdit') {
-                drawSkeletonOverlay(pinTargets, drawW, drawH);
+            // Draw skeleton pins and lines overlay ONLY for active layer, and NEVER during export/recording!
+            if (!exportMode && activeLayer && activeLayer.visible && activeLayer.imageLoaded) {
+                if (showBones || appMode === 'boneEdit') {
+                    const baseScale = Math.min((targetW * 0.70) / activeLayer.processedCanvas.width, (targetH * 0.70) / activeLayer.processedCanvas.height);
+                    const drawW = activeLayer.processedCanvas.width * baseScale * activeLayer.scale;
+                    const drawH = activeLayer.processedCanvas.height * baseScale * activeLayer.scale;
+                    const pinTargets = getAnimatedPinTargetsForLayer(activeLayer, drawW, drawH);
+
+                    const layerCenterX = (targetW / 2) + activeLayer.posX;
+                    const layerCenterY = (targetH / 2) + activeLayer.posY;
+
+                    drawSkeletonOverlay(targetCtx, activeLayer, pinTargets, drawW, drawH, layerCenterX, layerCenterY);
+                }
             }
 
-            // Update UI Counters
-            document.getElementById('frameStatus').innerText =
-                (appMode === 'boneEdit') ? '🦴 MODE: EDIT SKELETON' : `💃 TARI: Frame ${String(currentFrame + 1).padStart(2, '0')} / ${totalFrames}`;
+            // Update UI Counters & Indicators
+            const frameStatusEl = document.getElementById('frameStatus');
+            if (frameStatusEl && activeLayer) {
+                frameStatusEl.innerText = (appMode === 'boneEdit') ?
+                    `🦴 EDIT: ${activeLayer.name}` :
+                    `💃 TARI: ${layers.filter(l => l.visible).length} Layer Aktif`;
+            }
 
+            const activeChoreo = activeLayer ? activeLayer.choreo : 'funkGroove';
             const quarter = totalFrames / 4;
             const beatNum = Math.floor(currentFrame / quarter);
             const isBeatHit = (currentFrame % Math.round(quarter) === 0);
 
             const beatDot = document.getElementById('beatDot');
-            if (isBeatHit) {
+            if (beatDot && isBeatHit) {
                 beatDot.classList.add('active');
                 setTimeout(() => beatDot.classList.remove('active'), 80);
                 if (isPlaying && appMode === 'dance') {
@@ -1356,88 +2028,156 @@
             }
         }
 
-        function drawSkeletonOverlay(pinTargets, drawW, drawH) {
-            ctx.save();
-            ctx.translate(ocx, ocy);
+        function drawSkeletonOverlay(targetCtx, layer, pinTargets, drawW, drawH, centerX, centerY) {
+            targetCtx.save();
+            targetCtx.translate(centerX, centerY);
+            if (layer.flipH) {
+                targetCtx.scale(-1, 1);
+            }
 
             const pinMap = {};
-            for (let i = 0; i < skeletonPins.length; i++) {
-                pinMap[skeletonPins[i].id] = { pin: skeletonPins[i], target: pinTargets[i], index: i };
+            for (let i = 0; i < layer.skeletonPins.length; i++) {
+                pinMap[layer.skeletonPins[i].id] = { pin: layer.skeletonPins[i], target: pinTargets[i], index: i };
             }
 
             // 1. Bones lines
-            ctx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
-            ctx.lineWidth = 4;
-            ctx.lineCap = 'round';
-
-            for (let i = 0; i < skeletonPins.length; i++) {
-                const p = skeletonPins[i];
+            targetCtx.lineCap = 'round';
+            for (let i = 0; i < layer.skeletonPins.length; i++) {
+                const p = layer.skeletonPins[i];
                 if (p.parent && pinMap[p.parent]) {
                     const parentTarget = pinMap[p.parent].target;
                     const childTarget = pinTargets[i];
+                    const isAnchorBone = p.isAnchor || pinMap[p.parent].pin.isAnchor;
 
-                    ctx.beginPath();
-                    ctx.moveTo(parentTarget.x, parentTarget.y);
-                    ctx.lineTo(childTarget.x, childTarget.y);
-                    ctx.stroke();
+                    targetCtx.strokeStyle = isAnchorBone ? 'rgba(245, 158, 11, 0.9)' : 'rgba(56, 189, 248, 0.85)';
+                    targetCtx.lineWidth = isAnchorBone ? 5 : 4;
+
+                    targetCtx.beginPath();
+                    targetCtx.moveTo(parentTarget.x, parentTarget.y);
+                    targetCtx.lineTo(childTarget.x, childTarget.y);
+                    targetCtx.stroke();
+
+                    const midX = (parentTarget.x + childTarget.x) / 2;
+                    const midY = (parentTarget.y + childTarget.y) / 2;
+                    targetCtx.fillStyle = isAnchorBone ? '#f59e0b' : 'rgba(255, 255, 255, 0.6)';
+                    targetCtx.beginPath();
+                    targetCtx.arc(midX, midY, 3, 0, Math.PI * 2);
+                    targetCtx.fill();
                 }
             }
 
-            // 2. Joints
-            for (let i = 0; i < skeletonPins.length; i++) {
+            // 2. Ground Anchor Pivot Ring
+            for (let i = 0; i < layer.skeletonPins.length; i++) {
+                const p = layer.skeletonPins[i];
+                if (p.isAnchor) {
+                    const target = pinTargets[i];
+                    targetCtx.save();
+                    targetCtx.strokeStyle = 'rgba(245, 158, 11, 0.85)';
+                    targetCtx.lineWidth = 2.5;
+                    targetCtx.setLineDash([4, 3]);
+                    targetCtx.beginPath();
+                    targetCtx.ellipse(target.x, target.y + 18, 28, 8, 0, 0, Math.PI * 2);
+                    targetCtx.stroke();
+                    targetCtx.restore();
+                }
+            }
+
+            // 3. Joints (Sendi)
+            for (let i = 0; i < layer.skeletonPins.length; i++) {
                 const target = pinTargets[i];
-                const isSelected = (i === selectedPinIndex);
+                const isSelected = (i === layer.selectedPinIndex);
+                const pin = layer.skeletonPins[i];
 
                 if (appMode === 'boneEdit') {
-                    ctx.strokeStyle = isSelected ? 'rgba(239, 68, 68, 0.4)' : 'rgba(56, 189, 248, 0.2)';
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.arc(target.x, target.y, skeletonPins[i].radius * 0.45, 0, Math.PI * 2);
-                    ctx.stroke();
+                    targetCtx.strokeStyle = isSelected ? 'rgba(239, 68, 68, 0.4)' : (pin.isAnchor ? 'rgba(245, 158, 11, 0.35)' : 'rgba(56, 189, 248, 0.2)');
+                    targetCtx.lineWidth = 1;
+                    targetCtx.beginPath();
+                    targetCtx.arc(target.x, target.y, pin.radius * 0.45, 0, Math.PI * 2);
+                    targetCtx.stroke();
                 }
 
-                ctx.fillStyle = isSelected ? '#ef4444' : '#facc15';
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 2.5;
+                if (pin.isAnchor) {
+                    targetCtx.strokeStyle = '#f59e0b';
+                    targetCtx.lineWidth = 3;
+                    targetCtx.beginPath();
+                    targetCtx.arc(target.x, target.y, isSelected ? 14 : 12, 0, Math.PI * 2);
+                    targetCtx.stroke();
+                }
 
-                ctx.beginPath();
-                ctx.arc(target.x, target.y, isSelected ? 9 : 7, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.stroke();
+                targetCtx.fillStyle = isSelected ? '#ef4444' : (pin.isAnchor ? '#f59e0b' : '#facc15');
+                targetCtx.strokeStyle = '#ffffff';
+                targetCtx.lineWidth = 2.5;
+
+                targetCtx.beginPath();
+                targetCtx.arc(target.x, target.y, isSelected ? 10 : 7.5, 0, Math.PI * 2);
+                targetCtx.fill();
+                targetCtx.stroke();
+
+                if (pin.isAnchor) {
+                    targetCtx.save();
+                    if (layer.flipH) targetCtx.scale(-1, 1);
+                    targetCtx.font = 'bold 14px sans-serif';
+                    targetCtx.textAlign = 'center';
+                    targetCtx.fillText('⚓', (layer.flipH ? -target.x : target.x), target.y - 14);
+                    targetCtx.restore();
+                }
 
                 if (appMode === 'boneEdit') {
-                    ctx.fillStyle = '#0f172a';
-                    const textWidth = ctx.measureText(skeletonPins[i].name).width;
-                    ctx.fillRect(target.x + 12, target.y - 12, textWidth + 10, 18);
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-                    ctx.lineWidth = 1;
-                    ctx.strokeRect(target.x + 12, target.y - 12, textWidth + 10, 18);
+                    targetCtx.save();
+                    if (layer.flipH) targetCtx.scale(-1, 1);
+                    const rx = layer.flipH ? -target.x : target.x;
 
-                    ctx.fillStyle = '#ffffff';
-                    ctx.font = '11px sans-serif';
-                    ctx.textAlign = 'left';
-                    ctx.fillText(skeletonPins[i].name, target.x + 17, target.y + 1);
+                    targetCtx.fillStyle = '#0f172a';
+                    const displayName = (pin.isAnchor ? '⚓ ' : '') + pin.name;
+                    targetCtx.font = '11px sans-serif';
+                    const textWidth = targetCtx.measureText(displayName).width;
+                    targetCtx.fillRect(rx + 12, target.y - 12, textWidth + 10, 18);
+                    targetCtx.strokeStyle = pin.isAnchor ? '#f59e0b' : 'rgba(255, 255, 255, 0.2)';
+                    targetCtx.lineWidth = 1;
+                    targetCtx.strokeRect(rx + 12, target.y - 12, textWidth + 10, 18);
+
+                    targetCtx.fillStyle = pin.isAnchor ? '#fbbf24' : '#ffffff';
+                    targetCtx.textAlign = 'left';
+                    targetCtx.fillText(displayName, rx + 17, target.y + 1);
+                    targetCtx.restore();
                 }
             }
-            ctx.restore();
+
+            targetCtx.restore();
         }
 
-        // Animation Loop
+        // Animation Loop with Multi-BPM time-stepping
         function animate(timestamp) {
-            if (!lastFrameTime) lastFrameTime = timestamp;
-            const elapsed = timestamp - lastFrameTime;
-            const frameDuration = 1000 / fps;
+            if (!lastFrameTimestamp) lastFrameTimestamp = timestamp;
+            const deltaMs = Math.min(100, timestamp - lastFrameTimestamp);
+            const deltaSec = deltaMs / 1000;
+            lastFrameTimestamp = timestamp;
 
-            if (isPlaying && appMode === 'dance' && elapsed >= frameDuration) {
-                currentFrame = (currentFrame + 1) % totalFrames;
+            if (isPlaying && appMode === 'dance') {
+                // Advance each layer's animPhase based on its own independent BPM!
+                layers.forEach(layer => {
+                    if (!layer.visible) return;
+                    // 1 cycle = 4 beats in 4/4 measure
+                    const cycleFreq = (layer.bpm / 60) / 4;
+                    layer.animPhase = (layer.animPhase + deltaSec * cycleFreq) % 1.0;
+                });
+
+                // Master discrete stop-motion counter
+                const frameDurationMs = 1000 / fps;
+                masterFrameTime += deltaMs;
+                if (masterFrameTime >= frameDurationMs) {
+                    currentFrame = (currentFrame + 1) % totalFrames;
+                    masterFrameTime = masterFrameTime % frameDurationMs;
+                }
+
                 drawStage();
-                lastFrameTime = timestamp - (elapsed % frameDuration);
             }
+
             requestAnimationFrame(animate);
         }
 
         // ==========================================
-        // 6. INTERACTIVE PIN DRAGGING & EDITING
+        // 6. INTERACTION & PIN DRAGGING FOR LAYER
         // ==========================================
         function getCanvasMousePos(e) {
             const rect = canvas.getBoundingClientRect();
@@ -1451,55 +2191,69 @@
             };
         }
 
-        function findPinNear(x, y) {
-            const scale = Math.min((W * 0.75) / processedCanvas.width, (H * 0.75) / processedCanvas.height);
-            const drawW = processedCanvas.width * scale;
-            const drawH = processedCanvas.height * scale;
+        function findPinNearInActiveLayer(stageX, stageY) {
+            const activeLayer = getActiveLayer();
+            if (!activeLayer || !activeLayer.visible || !activeLayer.imageLoaded) return -1;
 
-            for (let i = 0; i < skeletonPins.length; i++) {
-                const pin = skeletonPins[i];
+            let localX = stageX - activeLayer.posX;
+            if (activeLayer.flipH) localX = -localX;
+            let localY = stageY - activeLayer.posY;
+
+            const baseScale = Math.min((W * 0.70) / activeLayer.processedCanvas.width, (H * 0.70) / activeLayer.processedCanvas.height);
+            const drawW = activeLayer.processedCanvas.width * baseScale * activeLayer.scale;
+            const drawH = activeLayer.processedCanvas.height * baseScale * activeLayer.scale;
+
+            for (let i = 0; i < activeLayer.skeletonPins.length; i++) {
+                const pin = activeLayer.skeletonPins[i];
                 const px = (pin.u - 0.5) * drawW;
                 const py = (pin.v - 0.5) * drawH;
-                const dist = Math.hypot(x - px, y - py);
-                if (dist <= 20) return i;
+                const dist = Math.hypot(localX - px, localY - py);
+                if (dist <= 24) return i;
             }
             return -1;
         }
 
         canvas.addEventListener('mousedown', (e) => {
             const pos = getCanvasMousePos(e);
+            const activeLayer = getActiveLayer();
+            if (!activeLayer) return;
 
             if (isAddingPin) {
-                const scale = Math.min((W * 0.75) / processedCanvas.width, (H * 0.75) / processedCanvas.height);
-                const drawW = processedCanvas.width * scale;
-                const drawH = processedCanvas.height * scale;
+                let localX = pos.x - activeLayer.posX;
+                if (activeLayer.flipH) localX = -localX;
+                let localY = pos.y - activeLayer.posY;
 
-                const u = Math.max(0, Math.min(1, (pos.x / drawW) + 0.5));
-                const v = Math.max(0, Math.min(1, (pos.y / drawH) + 0.5));
+                const baseScale = Math.min((W * 0.70) / activeLayer.processedCanvas.width, (H * 0.70) / activeLayer.processedCanvas.height);
+                const drawW = activeLayer.processedCanvas.width * baseScale * activeLayer.scale;
+                const drawH = activeLayer.processedCanvas.height * baseScale * activeLayer.scale;
 
-                const pinCount = skeletonPins.length + 1;
-                skeletonPins.push({
+                const u = Math.max(0, Math.min(1, (localX / drawW) + 0.5));
+                const v = Math.max(0, Math.min(1, (localY / drawH) + 0.5));
+
+                const pinCount = activeLayer.skeletonPins.length + 1;
+                activeLayer.skeletonPins.push({
                     id: 'custom_' + Date.now(),
                     name: 'Sendi Baru #' + pinCount,
                     u: u,
                     v: v,
                     parent: 'hips',
-                    radius: 150
+                    radius: 150,
+                    isAnchor: false
                 });
 
                 isAddingPin = false;
                 document.getElementById('addPinBtn').innerText = '➕ Tambah Sendi';
                 document.getElementById('addPinBtn').classList.remove('btn-accent');
-                selectedPinIndex = skeletonPins.length - 1;
+                activeLayer.selectedPinIndex = activeLayer.skeletonPins.length - 1;
                 updateJointListUI();
                 drawStage();
-                notify('Sendi baru berhasil ditambahkan!', 'success');
+                notify(`Sendi baru ditambahkan pada ${activeLayer.name}!`, 'success');
                 return;
             }
 
-            const hitIndex = findPinNear(pos.x, pos.y);
+            const hitIndex = findPinNearInActiveLayer(pos.x, pos.y);
             if (hitIndex !== -1) {
-                selectedPinIndex = hitIndex;
+                activeLayer.selectedPinIndex = hitIndex;
                 isDraggingPin = true;
                 updateJointListUI();
                 drawStage();
@@ -1507,17 +2261,24 @@
         });
 
         window.addEventListener('mousemove', (e) => {
-            if (!isDraggingPin || selectedPinIndex === -1) return;
+            if (!isDraggingPin) return;
+            const activeLayer = getActiveLayer();
+            if (!activeLayer || activeLayer.selectedPinIndex === -1) return;
+
             const pos = getCanvasMousePos(e);
-            const scale = Math.min((W * 0.75) / processedCanvas.width, (H * 0.75) / processedCanvas.height);
-            const drawW = processedCanvas.width * scale;
-            const drawH = processedCanvas.height * scale;
+            let localX = pos.x - activeLayer.posX;
+            if (activeLayer.flipH) localX = -localX;
+            let localY = pos.y - activeLayer.posY;
 
-            const u = Math.max(0, Math.min(1, (pos.x / drawW) + 0.5));
-            const v = Math.max(0, Math.min(1, (pos.y / drawH) + 0.5));
+            const baseScale = Math.min((W * 0.70) / activeLayer.processedCanvas.width, (H * 0.70) / activeLayer.processedCanvas.height);
+            const drawW = activeLayer.processedCanvas.width * baseScale * activeLayer.scale;
+            const drawH = activeLayer.processedCanvas.height * baseScale * activeLayer.scale;
 
-            skeletonPins[selectedPinIndex].u = u;
-            skeletonPins[selectedPinIndex].v = v;
+            const u = Math.max(0, Math.min(1, (localX / drawW) + 0.5));
+            const v = Math.max(0, Math.min(1, (localY / drawH) + 0.5));
+
+            activeLayer.skeletonPins[activeLayer.selectedPinIndex].u = u;
+            activeLayer.skeletonPins[activeLayer.selectedPinIndex].v = v;
 
             drawStage();
         });
@@ -1527,11 +2288,19 @@
         });
 
         // ==========================================
-        // 7. AUDIO SYNTH
+        // 7. AUDIO SYNTH (WEB AUDIO API)
         // ==========================================
         let audioCtx = null;
+        let audioMediaDest = null;
         function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                try {
+                    audioMediaDest = audioCtx.createMediaStreamDestination();
+                } catch (e) {
+                    console.warn('Audio MediaStreamDestination not supported:', e);
+                }
+            }
             if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
@@ -1544,6 +2313,9 @@
                     const gain = audioCtx.createGain();
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
+                    if (audioMediaDest) {
+                        try { gain.connect(audioMediaDest); } catch(e) {}
+                    }
                     osc.frequency.setValueAtTime(140, now);
                     osc.frequency.exponentialRampToValueAtTime(35, now + 0.13);
                     gain.gain.setValueAtTime(0.35, now);
@@ -1561,29 +2333,199 @@
                     const gain = audioCtx.createGain();
                     gain.gain.setValueAtTime(0.22, now);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-                    noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+                    noise.connect(filter); filter.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    if (audioMediaDest) {
+                        try { gain.connect(audioMediaDest); } catch(e) {}
+                    }
                     noise.start(now);
                 }
             } catch (e) {}
         }
 
         // ==========================================
-        // 8. CONTROLS & UI EVENT HANDLERS
+        // 8. MULTI-LAYER MANAGEMENT & UI SYNC
         // ==========================================
+        function updateLayerListUI() {
+            const listContainer = document.getElementById('layerListContainer');
+            listContainer.innerHTML = '';
+            document.getElementById('layerCountBadge').innerText = `${layers.length} Layer (${layers.filter(l => l.visible).length} Aktif)`;
+
+            const activeLayer = getActiveLayer();
+
+            // Synchronize Active Layer Inspector UI
+            if (activeLayer) {
+                document.getElementById('activeLayerInspectorName').innerText = activeLayer.name;
+                document.getElementById('layerNameInput').value = activeLayer.name;
+                document.getElementById('activeLayerFileName').innerText = 'Gambar: ' + activeLayer.imageName;
+                document.getElementById('activeLayerDim').innerText = activeLayer.imageLoaded ?
+                    `${activeLayer.processedCanvas.width} × ${activeLayer.processedCanvas.height}` : 'Memuat...';
+
+                document.getElementById('layerPosXSlider').value = activeLayer.posX;
+                document.getElementById('layerPosXVal').innerText = activeLayer.posX + ' px';
+
+                document.getElementById('layerPosYSlider').value = activeLayer.posY;
+                document.getElementById('layerPosYVal').innerText = activeLayer.posY + ' px';
+
+                document.getElementById('layerScaleSlider').value = Math.round(activeLayer.scale * 100);
+                document.getElementById('layerScaleVal').innerText = Math.round(activeLayer.scale * 100) + '%';
+
+                document.getElementById('layerOpacitySlider').value = Math.round(activeLayer.opacity * 100);
+                document.getElementById('layerOpacityVal').innerText = Math.round(activeLayer.opacity * 100) + '%';
+
+                document.getElementById('layerFlipCheckbox').checked = activeLayer.flipH;
+
+                document.getElementById('layerBpmSlider').value = activeLayer.bpm;
+                document.getElementById('layerBpmVal').innerText = activeLayer.bpm + ' BPM';
+
+                document.getElementById('activeLayerChoreoLabel').innerText = activeLayer.name;
+                document.getElementById('activeLayerSkeletonTitle').innerText = activeLayer.name;
+
+                // Sync choreo buttons active state
+                document.querySelectorAll('#choreoGridContainer .choreo-btn').forEach(btn => {
+                    if (btn.getAttribute('data-choreo') === activeLayer.choreo) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+
+            // Render each layer item in list
+            layers.forEach((layer, idx) => {
+                const item = document.createElement('div');
+                item.className = 'layer-item' + (idx === activeLayerIndex ? ' active' : '');
+
+                const choreoNameMap = {
+                    walkCycle: '🚶 Walk', runSprint: '🏃 Run', jumpLand: '🦘 Jump',
+                    swimming: '🏊 Swim', funkGroove: '🕺 Funk', waveGreet: '👋 Wave',
+                    yogaStretch: '🧘 Stretch', cheerClap: '👏 Clap', circleOrbit: '🌀 Circle', bodyWave: '🌊 Wave'
+                };
+
+                item.innerHTML = `
+                    <button class="layer-icon-btn ${layer.visible ? '' : 'vis-off'}" title="${layer.visible ? 'Sembunyikan Layer' : 'Tampilkan Layer'}">
+                        ${layer.visible ? '👁️' : '🕶️'}
+                    </button>
+                    <div class="layer-meta">
+                        <span class="layer-name-title">${layer.name}</span>
+                        <div class="layer-tags">
+                            <span class="layer-badge badge-choreo">${choreoNameMap[layer.choreo] || layer.choreo}</span>
+                            <span class="layer-badge badge-bpm">⚡ ${layer.bpm} BPM</span>
+                            <span class="layer-badge">${Math.round(layer.scale * 100)}%</span>
+                        </div>
+                    </div>
+                    <div class="layer-actions">
+                        <button class="layer-icon-btn up-btn" title="Pindah ke Atas">🔼</button>
+                        <button class="layer-icon-btn down-btn" title="Pindah ke Bawah">🔽</button>
+                    </div>
+                `;
+
+                // Eye visibility toggle
+                const visBtn = item.querySelector('.layer-icon-btn');
+                visBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    layer.visible = !layer.visible;
+                    updateLayerListUI();
+                    drawStage();
+                };
+
+                // Move up
+                const upBtn = item.querySelector('.up-btn');
+                upBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    if (idx < layers.length - 1) {
+                        const temp = layers[idx];
+                        layers[idx] = layers[idx + 1];
+                        layers[idx + 1] = temp;
+                        if (activeLayerIndex === idx) activeLayerIndex = idx + 1;
+                        else if (activeLayerIndex === idx + 1) activeLayerIndex = idx;
+                        updateLayerListUI();
+                        drawStage();
+                    }
+                };
+
+                // Move down
+                const downBtn = item.querySelector('.down-btn');
+                downBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    if (idx > 0) {
+                        const temp = layers[idx];
+                        layers[idx] = layers[idx - 1];
+                        layers[idx - 1] = temp;
+                        if (activeLayerIndex === idx) activeLayerIndex = idx - 1;
+                        else if (activeLayerIndex === idx - 1) activeLayerIndex = idx;
+                        updateLayerListUI();
+                        drawStage();
+                    }
+                };
+
+                item.onclick = () => {
+                    activeLayerIndex = idx;
+                    updateLayerListUI();
+                    updateJointListUI();
+                    drawStage();
+                };
+
+                listContainer.appendChild(item);
+            });
+
+            updateJointListUI();
+        }
+
         function updateJointListUI() {
             const container = document.getElementById('jointListContainer');
             container.innerHTML = '';
-            document.getElementById('pinCountBadge').innerText = `${skeletonPins.length} Sendi`;
 
-            skeletonPins.forEach((pin, idx) => {
+            const activeLayer = getActiveLayer();
+            if (!activeLayer) return;
+
+            document.getElementById('pinCountBadge').innerText = `${activeLayer.skeletonPins.length} Sendi`;
+
+            const activeAnchors = activeLayer.skeletonPins.filter(p => p.isAnchor);
+            const anchorNameSpan = document.getElementById('activeAnchorName');
+            if (anchorNameSpan) {
+                if (activeAnchors.length === 0) {
+                    anchorNameSpan.innerText = 'Tidak Ada (Bebas Melayang)';
+                } else if (activeAnchors.length === 1) {
+                    anchorNameSpan.innerText = activeAnchors[0].name;
+                } else {
+                    anchorNameSpan.innerText = `${activeAnchors[0].name} + ${activeAnchors.length - 1} lainnya`;
+                }
+            }
+
+            activeLayer.skeletonPins.forEach((pin, idx) => {
                 const item = document.createElement('div');
-                item.className = 'joint-item' + (idx === selectedPinIndex ? ' active' : '');
+                item.className = 'joint-item' + (idx === activeLayer.selectedPinIndex ? ' active' : '') + (pin.isAnchor ? ' is-anchor' : '');
+
+                let anchorBadge = pin.isAnchor ? `<span class="anchor-pill">⚓ Tumpu</span>` : '';
+                let parentInfo = pin.parent ? `<span style="color: #64748b; font-size: 10px;">➔ ${pin.parent}</span>` : '';
+
                 item.innerHTML = `
-                    <span><span class="badge-dot"></span><strong>${pin.name}</strong></span>
-                    <span style="color: #64748b; font-size: 11px;">U: ${pin.u.toFixed(2)} V: ${pin.v.toFixed(2)}</span>
+                    <div style="display: flex; align-items: center; gap: 6px; overflow: hidden;">
+                        <span class="badge-dot" style="${pin.isAnchor ? 'background: #f59e0b; box-shadow: 0 0 6px #f59e0b;' : ''}"></span>
+                        <strong style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 130px;">${pin.name}</strong>
+                        ${anchorBadge}
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                        ${parentInfo}
+                        <button class="anchor-mini-btn" title="${pin.isAnchor ? 'Lepas titik tumpu' : 'Jadikan titik tumpu (Anchor)'}" style="background: ${pin.isAnchor ? 'rgba(245, 158, 11, 0.25)' : 'rgba(255, 255, 255, 0.06)'}; border: 1px solid ${pin.isAnchor ? '#f59e0b' : 'rgba(255, 255, 255, 0.15)'}; color: ${pin.isAnchor ? '#fbbf24' : '#94a3b8'}; border-radius: 4px; padding: 2px 5px; font-size: 11px; cursor: pointer;">
+                            ${pin.isAnchor ? '⚓ Aktif' : '⚓ Set'}
+                        </button>
+                    </div>
                 `;
+
+                const anchorMini = item.querySelector('.anchor-mini-btn');
+                anchorMini.onclick = (e) => {
+                    e.stopPropagation();
+                    pin.isAnchor = !pin.isAnchor;
+                    activeLayer.selectedPinIndex = idx;
+                    updateJointListUI();
+                    drawStage();
+                    notify(pin.isAnchor ? `⚓ ${pin.name} pada ${activeLayer.name} menjadi Titik Tumpu!` : `Titik tumpu dilepas dari ${pin.name}.`, 'info');
+                };
+
                 item.onclick = () => {
-                    selectedPinIndex = idx;
+                    activeLayer.selectedPinIndex = idx;
                     updateJointListUI();
                     drawStage();
                 };
@@ -1591,6 +2533,585 @@
             });
         }
 
+        // ==========================================
+        // 9. LAYER CONTROLS (ADD, DUP, DELETE, RESETS)
+        // ==========================================
+        document.getElementById('addLayerBtn').onclick = () => {
+            const nextIdx = layers.length + 1;
+            const newLayer = new PuppetLayer(
+                'layer_' + Date.now(),
+                `Karakter ${nextIdx}`,
+                {
+                    posX: (layers.length % 2 === 0 ? -120 : 120) * Math.floor(layers.length / 2),
+                    posY: 15,
+                    scale: 0.85,
+                    choreo: ['funkGroove', 'walkCycle', 'waveGreet', 'runSprint', 'jumpLand', 'swimming'][layers.length % 6],
+                    bpm: 100 + (layers.length * 10)
+                }
+            );
+            loadLayerImage(newLayer, 'dancing_character_cutout.png', false, `Karakter ${nextIdx}`);
+            layers.push(newLayer);
+            activeLayerIndex = layers.length - 1;
+            updateLayerListUI();
+            drawStage();
+            notify(`Layer baru "${newLayer.name}" berhasil ditambahkan!`, 'success');
+        };
+
+        document.getElementById('dupLayerBtn').onclick = () => {
+            const cur = getActiveLayer();
+            if (!cur) return;
+            const dup = new PuppetLayer(
+                'layer_' + Date.now(),
+                `${cur.name} (Salinan)`,
+                {
+                    posX: cur.posX + 50,
+                    posY: cur.posY + 20,
+                    scale: cur.scale,
+                    flipH: cur.flipH,
+                    choreo: cur.choreo,
+                    bpm: cur.bpm,
+                    pins: cur.skeletonPins
+                }
+            );
+
+            if (cur.imageLoaded) {
+                dup.processedCanvas.width = cur.processedCanvas.width;
+                dup.processedCanvas.height = cur.processedCanvas.height;
+                dup.processedCtx.drawImage(cur.processedCanvas, 0, 0);
+                dup.imageLoaded = true;
+                dup.imageName = cur.imageName;
+            }
+
+            layers.push(dup);
+            activeLayerIndex = layers.length - 1;
+            updateLayerListUI();
+            drawStage();
+            notify(`Layer "${cur.name}" berhasil diduplikat!`, 'success');
+        };
+
+        document.getElementById('deleteLayerBtn').onclick = () => {
+            if (layers.length <= 1) {
+                notify('Minimal harus tersisa 1 layer!', 'error');
+                return;
+            }
+            const removed = layers.splice(activeLayerIndex, 1)[0];
+            activeLayerIndex = Math.max(0, activeLayerIndex - 1);
+            updateLayerListUI();
+            drawStage();
+            notify(`Layer "${removed.name}" telah dihapus.`, 'info');
+        };
+
+        document.getElementById('resetAllPosBtn').onclick = () => {
+            // Tata ulang posisi 4 layer berjejer harmonis di panggung
+            const defaultConfigs = [
+                { posX: 0, posY: 20, scale: 0.95, flipH: false },
+                { posX: -240, posY: 35, scale: 0.82, flipH: false },
+                { posX: 240, posY: 35, scale: 0.82, flipH: true },
+                { posX: 0, posY: -140, scale: 0.70, flipH: false }
+            ];
+
+            layers.forEach((l, idx) => {
+                if (idx < defaultConfigs.length) {
+                    l.posX = defaultConfigs[idx].posX;
+                    l.posY = defaultConfigs[idx].posY;
+                    l.scale = defaultConfigs[idx].scale;
+                    l.flipH = defaultConfigs[idx].flipH;
+                } else {
+                    l.posX = (idx % 2 === 0 ? -320 : 320);
+                    l.posY = 0;
+                    l.scale = 0.75;
+                }
+            });
+            updateLayerListUI();
+            drawStage();
+            notify('Posisi semua karakter berhasil ditata ulang harmonis!', 'success');
+        };
+
+        // Layer Name Input
+        document.getElementById('layerNameInput').oninput = (e) => {
+            const activeLayer = getActiveLayer();
+            if (activeLayer) {
+                activeLayer.name = e.target.value || 'Layer';
+                document.getElementById('activeLayerInspectorName').innerText = activeLayer.name;
+                document.getElementById('activeLayerChoreoLabel').innerText = activeLayer.name;
+                document.getElementById('activeLayerSkeletonTitle').innerText = activeLayer.name;
+                // Update only name in list without full re-render
+                const activeItem = document.querySelector('.layer-item.active .layer-name-title');
+                if (activeItem) activeItem.innerText = activeLayer.name;
+            }
+        };
+
+        // Position & Scale Sliders for Active Layer
+        document.getElementById('layerPosXSlider').oninput = (e) => {
+            const l = getActiveLayer();
+            if (l) {
+                l.posX = parseInt(e.target.value);
+                document.getElementById('layerPosXVal').innerText = l.posX + ' px';
+                drawStage();
+            }
+        };
+
+        document.getElementById('layerPosYSlider').oninput = (e) => {
+            const l = getActiveLayer();
+            if (l) {
+                l.posY = parseInt(e.target.value);
+                document.getElementById('layerPosYVal').innerText = l.posY + ' px';
+                drawStage();
+            }
+        };
+
+        document.getElementById('layerScaleSlider').oninput = (e) => {
+            const l = getActiveLayer();
+            if (l) {
+                l.scale = parseInt(e.target.value) / 100;
+                document.getElementById('layerScaleVal').innerText = e.target.value + '%';
+                drawStage();
+            }
+        };
+
+        document.getElementById('layerOpacitySlider').oninput = (e) => {
+            const l = getActiveLayer();
+            if (l) {
+                l.opacity = parseInt(e.target.value) / 100;
+                document.getElementById('layerOpacityVal').innerText = e.target.value + '%';
+                drawStage();
+            }
+        };
+
+        document.getElementById('layerFlipCheckbox').onchange = (e) => {
+            const l = getActiveLayer();
+            if (l) {
+                l.flipH = e.target.checked;
+                drawStage();
+            }
+        };
+
+        // Individual Layer BPM Slider
+        document.getElementById('layerBpmSlider').oninput = (e) => {
+            const l = getActiveLayer();
+            if (l) {
+                l.bpm = parseInt(e.target.value);
+                document.getElementById('layerBpmVal').innerText = l.bpm + ' BPM';
+                updateLayerListUI();
+            }
+        };
+
+        // Choreo buttons selector for Active Layer
+        document.querySelectorAll('#choreoGridContainer .choreo-btn').forEach(btn => {
+            btn.onclick = () => {
+                const l = getActiveLayer();
+                if (l) {
+                    document.querySelectorAll('#choreoGridContainer .choreo-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    l.choreo = btn.getAttribute('data-choreo');
+                    updateLayerListUI();
+                    drawStage();
+                    notify(`Gerakan untuk ${l.name} diubah ke ${btn.querySelector('.c-title').innerText}`, 'info');
+                }
+            };
+        });
+
+        // Skeleton Operations for Active Layer
+        const addPinBtn = document.getElementById('addPinBtn');
+        addPinBtn.onclick = () => {
+            isAddingPin = !isAddingPin;
+            if (isAddingPin) {
+                addPinBtn.innerText = '👆 Klik Karakter...';
+                addPinBtn.classList.add('btn-accent');
+                notify('Silakan klik pada gambar layer terpilih di panggung untuk menaruh sendi baru.', 'info');
+            } else {
+                addPinBtn.innerText = '➕ Tambah Sendi';
+                addPinBtn.classList.remove('btn-accent');
+            }
+        };
+
+        document.getElementById('snapSkeletonBtn').onclick = () => {
+            autoSnapSkeletonToLayer(getActiveLayer());
+        };
+
+        document.getElementById('removePinBtn').onclick = () => {
+            const l = getActiveLayer();
+            if (l && l.selectedPinIndex >= 0 && l.skeletonPins.length > 2) {
+                l.skeletonPins.splice(l.selectedPinIndex, 1);
+                l.selectedPinIndex = Math.max(0, l.selectedPinIndex - 1);
+                updateJointListUI();
+                drawStage();
+                notify('Sendi dihapus dari ' + l.name, 'info');
+            } else {
+                notify('Minimal harus ada 2 titik sendi!', 'error');
+            }
+        };
+
+        document.getElementById('resetPinsBtn').onclick = () => {
+            const l = getActiveLayer();
+            if (l) {
+                l.skeletonPins = createDefaultPins();
+                l.selectedPinIndex = -1;
+                updateJointListUI();
+                drawStage();
+                notify('Skeleton pada ' + l.name + ' dikembalikan ke default.', 'info');
+            }
+        };
+
+        // Toggle Anchor Button
+        document.getElementById('toggleAnchorBtn').onclick = () => {
+            const l = getActiveLayer();
+            if (!l) return;
+            if (l.selectedPinIndex < 0) {
+                const footIdx = l.skeletonPins.findIndex(p => p.id === 'l_foot' || p.id === 'r_foot');
+                l.selectedPinIndex = (footIdx >= 0) ? footIdx : 0;
+            }
+            const pin = l.skeletonPins[l.selectedPinIndex];
+            pin.isAnchor = !pin.isAnchor;
+            updateJointListUI();
+            drawStage();
+            notify(pin.isAnchor ? `⚓ ${pin.name} pada ${l.name} dijadikan Titik Tumpu!` : `Titik tumpu dilepas dari ${pin.name}.`, 'success');
+        };
+
+        // Quick Toggle Anchor button
+        document.getElementById('quickToggleAnchor').onclick = () => {
+            const l = getActiveLayer();
+            if (!l) return;
+            const currentAnchorIdx = l.skeletonPins.findIndex(p => p.isAnchor);
+            l.skeletonPins.forEach(p => p.isAnchor = false);
+
+            if (currentAnchorIdx === -1) {
+                const lFoot = l.skeletonPins.find(p => p.id === 'l_foot');
+                if (lFoot) lFoot.isAnchor = true;
+            } else {
+                const currentId = l.skeletonPins[currentAnchorIdx].id;
+                if (currentId === 'l_foot') {
+                    const rFoot = l.skeletonPins.find(p => p.id === 'r_foot');
+                    if (rFoot) rFoot.isAnchor = true;
+                } else if (currentId === 'r_foot') {
+                    const hips = l.skeletonPins.find(p => p.id === 'hips');
+                    if (hips) hips.isAnchor = true;
+                }
+            }
+            updateJointListUI();
+            drawStage();
+        };
+
+        // Subdivide Bone
+        document.getElementById('subdivideBtn').onclick = () => {
+            const l = getActiveLayer();
+            if (!l) return;
+            if (l.selectedPinIndex < 0) {
+                notify('Pilih salah satu sendi terlebih dahulu untuk membagi garis tulangnya!', 'info');
+                return;
+            }
+
+            let childPin = l.skeletonPins[l.selectedPinIndex];
+            let parentPin = null;
+
+            if (childPin.parent) {
+                parentPin = l.skeletonPins.find(p => p.id === childPin.parent);
+            } else {
+                const child = l.skeletonPins.find(p => p.parent === childPin.id);
+                if (child) {
+                    parentPin = childPin;
+                    childPin = child;
+                }
+            }
+
+            if (!parentPin) {
+                notify('Sendi ini tidak terhubung dengan garis tulang manapun.', 'error');
+                return;
+            }
+
+            const midU = (childPin.u + parentPin.u) / 2;
+            const midV = (childPin.v + parentPin.v) / 2;
+            const newId = 'sub_' + Date.now();
+            const shortParent = parentPin.name.split(' ')[0];
+            const shortChild = childPin.name.split(' ')[0];
+            const newName = `Sendi Lentur (${shortParent}-${shortChild})`;
+
+            const newPin = {
+                id: newId,
+                name: newName,
+                u: midU,
+                v: midV,
+                parent: parentPin.id,
+                radius: Math.round((childPin.radius + parentPin.radius) / 2),
+                isAnchor: false
+            };
+
+            childPin.parent = newId;
+            l.skeletonPins.push(newPin);
+            l.selectedPinIndex = l.skeletonPins.length - 1;
+            updateJointListUI();
+            drawStage();
+            notify(`⚡ Garis tulang pada ${l.name} dibagi menjadi 2 segmen lentur!`, 'success');
+        };
+
+        document.getElementById('showBonesCheckbox').onchange = (e) => {
+            showBones = e.target.checked;
+            drawStage();
+        };
+
+        // ==========================================
+        // 10. UPLOAD HANDLER FOR ACTIVE LAYER
+        // ==========================================
+        const layerFileInput = document.getElementById('layerFileInput');
+        const layerDropzone = document.getElementById('layerDropzone');
+        const autoBgRemoval = document.getElementById('autoBgRemoval');
+
+        layerDropzone.onclick = () => layerFileInput.click();
+
+        function handleUploadedFileForActiveLayer(file) {
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                notify('Berkas harus berupa gambar (PNG, JPG, WEBP).', 'error');
+                return;
+            }
+
+            const activeLayer = getActiveLayer();
+            if (!activeLayer) return;
+
+            notify(`Membaca gambar untuk ${activeLayer.name}...`, 'info');
+            const reader = new FileReader();
+
+            reader.onload = (evt) => {
+                const result = evt.target.result;
+                if (!result) {
+                    notify('Gagal membaca isi berkas gambar.', 'error');
+                    return;
+                }
+                loadLayerImage(activeLayer, result, autoBgRemoval.checked, file.name);
+            };
+
+            reader.onerror = () => {
+                notify('Gagal membaca berkas dari sistem penyimpanan.', 'error');
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        layerFileInput.onchange = (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (file) {
+                handleUploadedFileForActiveLayer(file);
+                layerFileInput.value = '';
+            }
+        };
+
+        layerDropzone.ondragover = (e) => {
+            e.preventDefault();
+            layerDropzone.classList.add('dragover');
+        };
+
+        layerDropzone.ondragleave = () => {
+            layerDropzone.classList.remove('dragover');
+        };
+
+        layerDropzone.ondrop = (e) => {
+            e.preventDefault();
+            layerDropzone.classList.remove('dragover');
+            const file = e.dataTransfer.files && e.dataTransfer.files[0];
+            if (file) handleUploadedFileForActiveLayer(file);
+        };
+
+        // Clipboard Paste (Ctrl+V) handler for active layer
+        window.addEventListener('paste', (e) => {
+            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+            for (let item of items) {
+                if (item.type.indexOf('image') === 0) {
+                    const blob = item.getAsFile();
+                    handleUploadedFileForActiveLayer(blob);
+                    notify('Gambar dari clipboard ditempel ke layer aktif!', 'success');
+                    break;
+                }
+            }
+        });
+
+        // Preset buttons for active layer
+        document.getElementById('loadMonsterBtn').onclick = () => {
+            const l = getActiveLayer();
+            if (l) loadLayerImage(l, 'dancing_character_cutout.png', false, 'Monster Bintang');
+        };
+
+        document.getElementById('loadMatisseBtn').onclick = () => {
+            const l = getActiveLayer();
+            if (l) loadLayerImage(l, 'A peek inside the studio_ Studies that make our projects_ (1).jpe', false, 'Penari Matisse');
+        };
+
+        document.getElementById('loadZendorBtn').onclick = () => {
+            const l = getActiveLayer();
+            if (l) loadLayerImage(l, 'Daniel Zendor drawing #art #comics #drawing #jump.jpe', false, 'Pelompat Daniel');
+        };
+
+        // ==========================================
+        // 11. HD EXPORT WITH 5X AUTO-LOOP
+        // ==========================================
+        const recordMp4Btn = document.getElementById('recordMp4Btn');
+        const recordWebmBtn = document.getElementById('recordWebmBtn');
+        let isRecording = false;
+
+        async function startVideoExport(format = 'mp4') {
+            if (isRecording) return;
+            if (!('MediaRecorder' in window)) {
+                notify('Browser Anda tidak mendukung MediaRecorder API.', 'error');
+                return;
+            }
+
+            if (appMode !== 'dance') {
+                document.getElementById('tabDanceMode').click();
+            }
+            if (!isPlaying) {
+                isPlaying = true;
+                document.getElementById('playToggleBtn').innerText = '⏸ Jeda';
+            }
+
+            let mimeType = '';
+            let fileExt = format;
+            if (format === 'mp4') {
+                const mp4Candidates = [
+                    'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
+                    'video/mp4;codecs=avc1',
+                    'video/mp4;codecs=h264',
+                    'video/mp4'
+                ];
+                for (const c of mp4Candidates) {
+                    if (MediaRecorder.isTypeSupported(c)) {
+                        mimeType = c;
+                        break;
+                    }
+                }
+                if (!mimeType) {
+                    mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
+                }
+            } else {
+                mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
+                fileExt = 'webm';
+            }
+
+            // CLEAN RENDER EXPORT (TIDAK ADA SKELETON / GARIS TULANG / KONTROL!)
+            isRecording = true;
+            isExportingVideo = true;
+
+            // Reset all layers to loop start (phase = 0)
+            layers.forEach(layer => layer.animPhase = 0.0);
+            currentFrame = 0;
+            drawStage();
+
+            const activeBtn = (format === 'mp4') ? recordMp4Btn : recordWebmBtn;
+            const originalText = activeBtn ? activeBtn.innerText : '🎬 Download MP4';
+            const originalBg = activeBtn ? activeBtn.style.background : '';
+
+            if (activeBtn) {
+                activeBtn.style.background = '#ef4444';
+                activeBtn.style.color = '#ffffff';
+            }
+
+            // Capture native HD 1080p canvas stream
+            const canvasStream = canvas.captureStream(fps);
+            let mediaStream = canvasStream;
+            try {
+                if (audioCtx && audioMediaDest && !isMuted) {
+                    const audioTrack = audioMediaDest.stream.getAudioTracks()[0];
+                    if (audioTrack) {
+                        mediaStream = new MediaStream([
+                            ...canvasStream.getVideoTracks(),
+                            audioTrack
+                        ]);
+                    }
+                }
+            } catch (streamErr) {
+                console.warn('Audio stream combine fallback:', streamErr);
+            }
+
+            let recorder;
+            try {
+                recorder = new MediaRecorder(mediaStream, {
+                    mimeType,
+                    videoBitsPerSecond: 12000000 // 12 Mbps Kualitas Tinggi Full HD
+                });
+            } catch (recInitErr) {
+                recorder = new MediaRecorder(mediaStream);
+            }
+
+            const chunks = [];
+            recorder.ondataavailable = (e) => {
+                if (e.data && e.data.size > 0) chunks.push(e.data);
+            };
+
+            // AUTO-LOOP 5 KALI:
+            // 1 loop durasi dihitung berdasarkan 24 frame @ master FPS (e.g. 24 / 12 = 2.0s per loop)
+            const loopDurationMs = (totalFrames / fps) * 1000;
+            const totalLoops = 5;
+            const totalDurationMs = Math.round(loopDurationMs * totalLoops); // Tepat 5 putaran penuh!
+
+            const bgLabel = (downloadBgMode === 'transparent') ? 'Transparan (Alpha)' :
+                           (downloadBgMode === 'green' ? 'Green Screen #00FF00' : 'Sesuai Panggung');
+
+            notify(`🎬 Memulai ekspor ${fileExt.toUpperCase()} HD (5x Auto-Loop, latar ${bgLabel})...`, 'info');
+
+            const startTime = Date.now();
+            const progressInterval = setInterval(() => {
+                if (!isRecording) {
+                    clearInterval(progressInterval);
+                    return;
+                }
+                const elapsed = Date.now() - startTime;
+                const currentLoop = Math.min(totalLoops, Math.floor(elapsed / loopDurationMs) + 1);
+                const percent = Math.min(99, Math.round((elapsed / totalDurationMs) * 100));
+                if (activeBtn) {
+                    activeBtn.innerText = `🔴 Merekam HD (Loop ${currentLoop}/${totalLoops} · ${percent}%)`;
+                }
+            }, 100);
+
+            recorder.onstop = () => {
+                clearInterval(progressInterval);
+                const blob = new Blob(chunks, { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `tarian_multi_layer_HD_${downloadBgMode}_5x_loop_${Date.now()}.${fileExt}`;
+                a.click();
+                setTimeout(() => URL.revokeObjectURL(url), 2000);
+
+                isRecording = false;
+                isExportingVideo = false;
+                if (activeBtn) {
+                    activeBtn.innerText = originalText;
+                    activeBtn.style.background = originalBg;
+                    activeBtn.style.color = '';
+                }
+                drawStage();
+
+                notify(`✅ Video ${fileExt.toUpperCase()} HD 1080p (5x Loop, latar ${bgLabel}, bersih tanpa skeleton) berhasil diunduh!`, 'success');
+            };
+
+            recorder.start(100);
+
+            setTimeout(() => {
+                if (recorder && recorder.state === 'recording') {
+                    recorder.stop();
+                }
+            }, totalDurationMs);
+        }
+
+        if (recordMp4Btn) recordMp4Btn.onclick = () => startVideoExport('mp4');
+        if (recordWebmBtn) recordWebmBtn.onclick = () => startVideoExport('webm');
+
+        document.getElementById('snapshotBtn').onclick = () => {
+            const wasExporting = isExportingVideo;
+            isExportingVideo = true;
+            drawStage();
+            const dataUrl = canvas.toDataURL('image/png');
+            isExportingVideo = wasExporting;
+            drawStage();
+
+            const link = document.createElement('a');
+            const bgLabel = (downloadBgMode === 'transparent') ? 'transparan' :
+                           (downloadBgMode === 'green' ? 'greenscreen' : 'panggung');
+            link.download = `snapshot_HD_1080p_${bgLabel}_${Date.now()}.png`;
+            link.href = dataUrl;
+            link.click();
+            notify(`📸 Snapshot HD 1080p (${bgLabel}) bersih tanpa skeleton berhasil disimpan!`, 'success');
+        };
+
+        // Mode switch tabs
         const tabBone = document.getElementById('tabBoneMode');
         const tabDance = document.getElementById('tabDanceMode');
         const bannerIcon = document.getElementById('bannerIcon');
@@ -1601,7 +3122,7 @@
             tabBone.classList.add('active');
             tabDance.classList.remove('active');
             bannerIcon.innerText = '📍';
-            bannerText.innerText = 'Tarik titik sendi (kuning) untuk menyesuaikan dengan posisi tubuh gambar';
+            bannerText.innerText = 'Tarik titik sendi (kuning) pada layer aktif untuk menyesuaikan posisi tubuh';
             drawStage();
         };
 
@@ -1611,67 +3132,15 @@
             tabDance.classList.add('active');
             tabBone.classList.remove('active');
             bannerIcon.innerText = '💃';
-            bannerText.innerText = 'Karakter menari mengikuti tatanan skeleton & ketukan ritmik!';
+            bannerText.innerText = 'Semua layer menari bersama dengan BPM & gerakan masing-masing!';
             drawStage();
         };
 
-        const addPinBtn = document.getElementById('addPinBtn');
-        addPinBtn.onclick = () => {
-            isAddingPin = !isAddingPin;
-            if (isAddingPin) {
-                addPinBtn.innerText = '👆 Klik pada Karakter...';
-                addPinBtn.classList.add('btn-accent');
-                notify('Silakan klik pada gambar di panggung untuk menaruh sendi baru.', 'info');
-            } else {
-                addPinBtn.innerText = '➕ Tambah Sendi';
-                addPinBtn.classList.remove('btn-accent');
-            }
-        };
-
-        document.getElementById('snapSkeletonBtn').onclick = () => {
-            autoSnapSkeletonToImage();
-        };
-
-        document.getElementById('removePinBtn').onclick = () => {
-            if (selectedPinIndex >= 0 && skeletonPins.length > 2) {
-                skeletonPins.splice(selectedPinIndex, 1);
-                selectedPinIndex = Math.max(0, selectedPinIndex - 1);
-                updateJointListUI();
-                drawStage();
-                notify('Sendi dihapus.', 'info');
-            } else {
-                notify('Minimal harus ada 2 titik sendi!', 'error');
-            }
-        };
-
-        document.getElementById('resetPinsBtn').onclick = () => {
-            skeletonPins = JSON.parse(JSON.stringify(defaultPins));
-            selectedPinIndex = -1;
-            updateJointListUI();
-            drawStage();
-            notify('Skeleton dikembalikan ke posisi default.', 'info');
-        };
-
-        document.getElementById('showBonesCheckbox').onchange = (e) => {
-            showBones = e.target.checked;
-            drawStage();
-        };
-
-        document.querySelectorAll('.choreo-btn').forEach(btn => {
-            btn.onclick = () => {
-                document.querySelectorAll('.choreo-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentChoreo = btn.getAttribute('data-choreo');
-                drawStage();
-            };
-        });
-
+        // Master Sliders
         const fpsSlider = document.getElementById('fpsSlider');
         fpsSlider.oninput = (e) => {
             fps = parseInt(e.target.value);
             document.getElementById('fpsVal').innerText = fps + ' FPS';
-            const approxBpm = Math.round((fps / totalFrames) * 4 * 60);
-            document.getElementById('bpmVal').innerText = approxBpm + ' BPM';
         };
 
         const bounceSlider = document.getElementById('bounceSlider');
@@ -1697,13 +3166,30 @@
             if (appMode !== 'dance' || !isPlaying) drawStage();
         };
 
-        document.querySelectorAll('.pill-btn').forEach(pill => {
+        // Download Background Mode Pills
+        document.querySelectorAll('#downloadBgPills .pill-btn').forEach(pill => {
             pill.onclick = () => {
-                document.querySelectorAll('.pill-btn').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('#downloadBgPills .pill-btn').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                downloadBgMode = pill.getAttribute('data-dlbg');
+
+                const modeLabels = {
+                    transparent: '🏁 Transparan (Alpha Channel - Sempurna untuk WebM & PNG)',
+                    stage: '🖼️ Sesuai Latar Panggung Studio',
+                    green: '🟩 Green Screen (#00FF00 Chroma Key untuk Video Editor)'
+                };
+                notify(`Latar hasil download diatur ke: ${modeLabels[downloadBgMode]}`, 'info');
+            };
+        });
+
+        // Stage Background Pills
+        document.querySelectorAll('#stageBgPills .pill-btn').forEach(pill => {
+            pill.onclick = () => {
+                document.querySelectorAll('#stageBgPills .pill-btn').forEach(p => p.classList.remove('active'));
                 pill.classList.add('active');
                 stageBg = pill.getAttribute('data-bg');
                 document.getElementById('canvasWrapper').style.background =
-                    (stageBg === 'dark' ? '#11141c' : (stageBg === 'white' ? '#ffffff' : '#faf9f5'));
+                    (stageBg === 'dark' ? '#11141c' : (stageBg === 'white' ? '#ffffff' : (stageBg === 'transparent' ? '#ffffff' : '#faf9f5')));
                 drawStage();
             };
         });
@@ -1719,6 +3205,9 @@
             isPlaying = false;
             playToggleBtn.innerText = '▶ Putar';
             currentFrame = (currentFrame - 1 + totalFrames) % totalFrames;
+            layers.forEach(l => {
+                l.animPhase = (l.animPhase - 1 / totalFrames + 1.0) % 1.0;
+            });
             drawStage();
         };
 
@@ -1726,6 +3215,9 @@
             isPlaying = false;
             playToggleBtn.innerText = '▶ Putar';
             currentFrame = (currentFrame + 1) % totalFrames;
+            layers.forEach(l => {
+                l.animPhase = (l.animPhase + 1 / totalFrames) % 1.0;
+            });
             drawStage();
         };
 
@@ -1734,153 +3226,6 @@
             initAudio();
             isMuted = !isMuted;
             audioToggleBtn.innerText = isMuted ? '🔇 Beat: MATI' : '🔊 Beat: AKTIF';
-        };
-
-        document.getElementById('snapshotBtn').onclick = () => {
-            const link = document.createElement('a');
-            link.download = `skeleton_dance_frame_${String(currentFrame + 1).padStart(2, '0')}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            notify('Snapshot berhasil diunduh!', 'success');
-        };
-
-        const recordVideoBtn = document.getElementById('recordVideoBtn');
-        let isRecording = false;
-
-        recordVideoBtn.onclick = () => {
-            if (isRecording) return;
-            if (!('MediaRecorder' in window)) {
-                notify('Browser Anda tidak mendukung MediaRecorder API.', 'error');
-                return;
-            }
-
-            isRecording = true;
-            recordVideoBtn.innerText = '🔴 Merekam...';
-            recordVideoBtn.style.background = '#ef4444';
-            recordVideoBtn.style.color = '#ffffff';
-
-            const stream = canvas.captureStream(fps);
-            let mimeType = 'video/webm;codecs=vp9';
-            if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/webm';
-
-            const recorder = new MediaRecorder(stream, { mimeType });
-            const chunks = [];
-
-            recorder.ondataavailable = (e) => {
-                if (e.data && e.data.size > 0) chunks.push(e.data);
-            };
-
-            recorder.onstop = () => {
-                const blob = new Blob(chunks, { type: mimeType });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'skeleton_dance_' + currentChoreo + '.webm';
-                a.click();
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-                isRecording = false;
-                recordVideoBtn.innerText = '🎥 Rekam Video';
-                recordVideoBtn.style.background = '';
-                recordVideoBtn.style.color = '';
-                notify('Video berhasil disimpan!', 'success');
-            };
-
-            recorder.start();
-            setTimeout(() => {
-                if (recorder.state === 'recording') recorder.stop();
-            }, (totalFrames / fps) * 2000);
-        };
-
-        // ==========================================
-        // 9. UPLOAD & CLIPBOARD HANDLERS
-        // ==========================================
-        const fileInput = document.getElementById('fileInput');
-        const dropzone = document.getElementById('dropzone');
-        const autoBgRemoval = document.getElementById('autoBgRemoval');
-
-        dropzone.onclick = () => fileInput.click();
-
-        function handleUploadedFile(file) {
-            if (!file) return;
-            if (!file.type.startsWith('image/')) {
-                notify('Berkas harus berupa gambar (PNG, JPG, WEBP).', 'error');
-                return;
-            }
-
-            notify(`Membaca ${file.name}...`, 'info');
-            const reader = new FileReader();
-
-            reader.onload = (evt) => {
-                const result = evt.target.result;
-                if (!result) {
-                    notify('Gagal membaca isi berkas gambar.', 'error');
-                    return;
-                }
-                loadCharacterImage(result, autoBgRemoval.checked, file.name);
-            };
-
-            reader.onerror = () => {
-                notify('Gagal membaca berkas dari sistem penyimpanan.', 'error');
-            };
-
-            reader.readAsDataURL(file);
-        }
-
-        fileInput.onchange = (e) => {
-            const file = e.target.files && e.target.files[0];
-            if (file) {
-                handleUploadedFile(file);
-                fileInput.value = ''; // Reset so uploading same file again triggers onchange
-            }
-        };
-
-        dropzone.ondragover = (e) => {
-            e.preventDefault();
-            dropzone.classList.add('dragover');
-        };
-
-        dropzone.ondragleave = () => {
-            dropzone.classList.remove('dragover');
-        };
-
-        dropzone.ondrop = (e) => {
-            e.preventDefault();
-            dropzone.classList.remove('dragover');
-            const file = e.dataTransfer.files && e.dataTransfer.files[0];
-            if (file) handleUploadedFile(file);
-        };
-
-        // Clipboard Paste (Ctrl+V) handler
-        window.addEventListener('paste', (e) => {
-            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-            for (let item of items) {
-                if (item.type.indexOf('image') === 0) {
-                    const blob = item.getAsFile();
-                    handleUploadedFile(blob);
-                    notify('Gambar dari clipboard berhasil ditempel (pasted)!', 'success');
-                    break;
-                }
-            }
-        });
-
-        // Preset buttons
-        document.getElementById('loadMonsterBtn').onclick = () => {
-            loadCharacterImage('dancing_character_cutout.png', false, 'Monster Bintang');
-            skeletonPins = JSON.parse(JSON.stringify(defaultPins));
-            updateJointListUI();
-        };
-
-        document.getElementById('loadMatisseBtn').onclick = () => {
-            loadCharacterImage('A peek inside the studio_ Studies that make our projects_ (1).jpe', false, 'Penari Matisse');
-            skeletonPins = [
-                { id: 'dancer_top',   name: 'Penari Atas',    u: 0.50, v: 0.28, parent: 'dancer_center', radius: 150 },
-                { id: 'dancer_center',name: 'Pusat Lingkaran',u: 0.51, v: 0.49, parent: null,           radius: 200 },
-                { id: 'dancer_left',  name: 'Penari Kiri',    u: 0.26, v: 0.52, parent: 'dancer_center', radius: 150 },
-                { id: 'dancer_right', name: 'Penari Kanan',   u: 0.78, v: 0.50, parent: 'dancer_center', radius: 150 },
-                { id: 'dancer_bottom',name: 'Penari Lompat',  u: 0.54, v: 0.72, parent: 'dancer_center', radius: 160 }
-            ];
-            updateJointListUI();
         };
 
         // Keyboard Shortcuts
@@ -1897,10 +3242,58 @@
             }
         });
 
-        // Initial setup
-        updateJointListUI();
-        loadCharacterImage('dancing_character_cutout.png', false, 'Monster Bintang');
-        requestAnimationFrame(animate);
+        // ==========================================
+        // 12. INITIALIZATION (DEFAULT 4 LAYERS)
+        // ==========================================
+        function initApp() {
+            // Default 4 Layers with distinct positions, individual choreographies, and BPMs
+            layers = [
+                new PuppetLayer('layer_1', 'Karakter 1 (Tengah)', {
+                    posX: 0,
+                    posY: 20,
+                    scale: 0.95,
+                    choreo: 'funkGroove',
+                    bpm: 120
+                }),
+                new PuppetLayer('layer_2', 'Penari Kiri (Langkah)', {
+                    posX: -240,
+                    posY: 35,
+                    scale: 0.82,
+                    flipH: false,
+                    choreo: 'walkCycle',
+                    bpm: 95
+                }),
+                new PuppetLayer('layer_3', 'Penari Kanan (Sapa)', {
+                    posX: 240,
+                    posY: 35,
+                    scale: 0.82,
+                    flipH: true,
+                    choreo: 'waveGreet',
+                    bpm: 135
+                }),
+                new PuppetLayer('layer_4', 'Penari Belakang (Lompat)', {
+                    posX: 0,
+                    posY: -140,
+                    scale: 0.70,
+                    flipH: false,
+                    choreo: 'jumpLand',
+                    bpm: 110
+                })
+            ];
+
+            activeLayerIndex = 0;
+
+            // Load images into all 4 layers
+            loadLayerImage(layers[0], 'dancing_character_cutout.png', false, 'Monster Bintang Utama');
+            loadLayerImage(layers[1], 'dancing_character_cutout.png', false, 'Monster Kiri');
+            loadLayerImage(layers[2], 'dancing_character_cutout.png', false, 'Monster Kanan');
+            loadLayerImage(layers[3], 'dancing_character_cutout.png', false, 'Monster Belakang');
+
+            updateLayerListUI();
+            requestAnimationFrame(animate);
+        }
+
+        initApp();
     </script>
 </body>
 </html>

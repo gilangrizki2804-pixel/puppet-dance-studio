@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -425,7 +425,8 @@
                 </div>
                 <div class="btn-group">
                     <button id="audioBtn" title="Suara Tabuhan Ritmik">🔊 Suara: AKTIF</button>
-                    <button id="recordBtn" title="Rekam Animasi Menjadi Video WebM">🎥 Rekam Video</button>
+                    <button id="recordMp4Btn" class="btn-primary" style="background: linear-gradient(135deg, #059669, #10b981); color: #fff; font-weight: 700;" title="Download Video MP4">🎬 Download MP4</button>
+                    <button id="recordWebmBtn" title="Download Format Alternatif WebM">📹 WebM</button>
                     <button id="snapBtn" title="Ambil Foto Frame Ini">📸 Snapshot</button>
                 </div>
             </div>
@@ -841,56 +842,102 @@
         };
 
         // Video Recording via MediaRecorder
-        const recordBtn = document.getElementById('recordBtn');
+        const recordMp4Btn = document.getElementById('recordMp4Btn');
+        const recordWebmBtn = document.getElementById('recordWebmBtn');
         let isRecording = false;
 
-        recordBtn.onclick = () => {
+        function startVideoExport(format = 'mp4') {
             if (isRecording) return;
             if (!('MediaRecorder' in window)) {
                 alert('Browser Anda tidak mendukung MediaRecorder API.');
                 return;
             }
 
-            isRecording = true;
-            recordBtn.innerText = '🔴 Merekam...';
-            recordBtn.style.background = '#ef4444';
-            recordBtn.style.color = '#ffffff';
-
-            const stream = canvas.captureStream(fps);
-            let mimeType = 'video/webm;codecs=vp9';
-            if (!MediaRecorder.isTypeSupported(mimeType)) {
-                mimeType = 'video/webm';
+            let mimeType = '';
+            let fileExt = format;
+            if (format === 'mp4') {
+                const mp4Candidates = [
+                    'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
+                    'video/mp4;codecs=avc1',
+                    'video/mp4;codecs=h264',
+                    'video/mp4'
+                ];
+                for (const c of mp4Candidates) {
+                    if (MediaRecorder.isTypeSupported(c)) {
+                        mimeType = c;
+                        break;
+                    }
+                }
+                if (!mimeType) {
+                    mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
+                }
+            } else {
+                mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
+                fileExt = 'webm';
             }
 
-            const recorder = new MediaRecorder(stream, { mimeType });
-            const chunks = [];
+            isRecording = true;
+            const activeBtn = (format === 'mp4') ? recordMp4Btn : recordWebmBtn;
+            const originalText = activeBtn ? activeBtn.innerText : '🎬 Download MP4';
+            const originalBg = activeBtn ? activeBtn.style.background : '';
 
+            if (activeBtn) {
+                activeBtn.style.background = '#ef4444';
+                activeBtn.style.color = '#ffffff';
+            }
+
+            const stream = canvas.captureStream(fps);
+            let recorder;
+            try {
+                recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 4000000 });
+            } catch (err) {
+                recorder = new MediaRecorder(stream);
+            }
+
+            const chunks = [];
             recorder.ondataavailable = (e) => {
                 if (e.data && e.data.size > 0) chunks.push(e.data);
             };
 
+            const recordDurationMs = Math.round((totalFrames / fps) * 2000);
+            const startTime = Date.now();
+
+            const progressInterval = setInterval(() => {
+                if (!isRecording) {
+                    clearInterval(progressInterval);
+                    return;
+                }
+                const elapsed = Date.now() - startTime;
+                const percent = Math.min(99, Math.round((elapsed / recordDurationMs) * 100));
+                if (activeBtn) activeBtn.innerText = `🔴 Merekam (${percent}%)`;
+            }, 100);
+
             recorder.onstop = () => {
+                clearInterval(progressInterval);
                 const blob = new Blob(chunks, { type: mimeType });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'tarian_melingkar_' + currentMode + '.webm';
+                a.download = `tarian_melingkar_${currentMode}_${Date.now()}.${fileExt}`;
                 a.click();
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                setTimeout(() => URL.revokeObjectURL(url), 2000);
 
                 isRecording = false;
-                recordBtn.innerText = '🎥 Rekam Video';
-                recordBtn.style.background = '';
-                recordBtn.style.color = '';
+                if (activeBtn) {
+                    activeBtn.innerText = originalText;
+                    activeBtn.style.background = originalBg;
+                    activeBtn.style.color = '';
+                }
             };
 
-            recorder.start();
-            // Record 2 full loops
-            const recordDurationMs = (totalFrames / fps) * 2000;
+            recorder.start(100);
             setTimeout(() => {
                 if (recorder.state === 'recording') recorder.stop();
             }, recordDurationMs);
-        };
+        }
+
+        if (recordMp4Btn) recordMp4Btn.onclick = () => startVideoExport('mp4');
+        if (recordWebmBtn) recordWebmBtn.onclick = () => startVideoExport('webm');
 
         // Keyboard Controls
         window.addEventListener('keydown', (e) => {

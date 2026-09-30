@@ -1,6 +1,6 @@
 # 🕺 2D Puppet Skeleton Studio & Stop-Motion Dance Animator
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-brightgreen?logo=github)](https://pages.github.com/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-brightgreen?logo=github)](https://gilangrizki2804-pixel.github.io/puppet-dance-studio/)
 [![Pure JavaScript](https://img.shields.io/badge/JavaScript-Vanilla%20ES6+-yellow?logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%202D%20Deformation-E34F26?logo=html5)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 [![Web Audio API](https://img.shields.io/badge/Web%20Audio%20API-Synthesizer-blue)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
@@ -24,32 +24,47 @@ Aplikasi web interaktif tanpa build-step (*Zero Build / Plug & Play*) untuk memb
 
 ## ✨ Fitur Unggulan (Key Features)
 
-1. **🎨 Upload Gambar Bebas (Multi-input):**
-   - Mendukung klik tombol unggah, **Drag and Drop** langsung ke canvas, maupun **Paste dari Clipboard (`Ctrl + V`)**.
-   - Otomatis melakukan *rescaling* cerdas agar performa rendering tetap 60 FPS.
+1. **🎨 Sistem Multi-Layer (Default 4 Lapisan Karakter):**
+   - **4 Karakter Default Menari Bersama**: Hadir langsung dengan 4 layer karakter yang tersusun rapi di panggung dengan posisi, koreografi, dan ritme BPM masing-masing.
+   - **Tambah & Kelola Manual**: Bebas menambah layer baru (`➕ Tambah Layer`), menduplikat (`📋 Duplikat`), menghapus (`🗑️ Hapus`), dan mengatur urutan tumpukan z-index (`🔼` / `🔽`).
+   - **Upload Mandiri Per Layer**: Setiap layer dapat diunggah gambar tersendiri (klik, drag-and-drop, atau paste `Ctrl+V`), lengkap dengan fitur *Auto Background Removal* otomatis per layer.
+   - **BPM & Kecepatan Independen Tiap Layer**: Setiap karakter dapat diatur temponya masing-masing (misal Layer 1: 120 BPM Funk Dance, Layer 2: 95 BPM Jalan Santai, Layer 3: 135 BPM Melambai Cepat, Layer 4: 110 BPM Lompat Enerjik).
+   - **Transformasi Bebas di Panggung**: Atur posisi horizontal (Geser X), posisi vertikal (Geser Y), ukuran (Skala 40% - 180%), opasitas, dan cermin horizontal (*Flip*) untuk tiap layer secara presisi.
 
-2. **🪄 Client-Side Auto Background Removal:**
-   - Algoritma flood-fill BFS berbasis *Typed Array* yang aman dan cepat langsung di browser untuk membersihkan latar belakang gambar (putih/kontras) tanpa perlu server backend.
+2. **🦴 Skeleton & Bone Rigging Fleksibel (Multi-Joint & Anchor):**
+   - **Sendi Ganda (Dual-Joint Limbs)**: Setiap garis anggota tubuh memiliki 2 titik sendi fleksibel (Bahu/Dada ➔ Siku ➔ Tangan, Pinggul ➔ Lutut ➔ Telapak Kaki).
+   - **⚡ Bagi Sendi (Subdivide Bone)**: Membagi garis tulang apa pun menjadi 2 segmen sendi lentur hanya dengan sekali klik.
+   - **⚓ Fitur Titik Tumpu (Anchor Point)**: Mengunci titik tumpu (misal: Kaki Kiri/Kanan menapak kokoh di lantai, atau Pinggul stabil di tengah), sehingga karakter menari dengan poros dan pijakan lantai yang realistis tanpa bergeser liar.
+   - **🎯 Auto-Snap to Body**: Menempatkan sendi secara proporsional otomatis di atas siluet tubuh karakter pada layer terpilih.
+   - **Fitur Pin Bebas**: Tambah sendi kustom (*Add Pin*) dan hapus sendi kapan saja pada layer aktif.
 
-3. **🦴 Skeleton & Bone Rigging Editor:**
-   - **Mode Edit Skeleton**: Geser titik sendi (Head, Neck, Torso, Hips, Elbows, Wrists, Knees, Feet) secara interaktif.
-   - **Fitur Pin Tambahan**: Tambahkan pin kustom (*Add Pin*) dan hapus pin (*Delete Pin*) untuk titik deformasi fleksibel.
-   - **Auto-Snap to Body**: Menempatkan kerangka tubuh secara proporsional otomatis di atas gambar karakter.
+3. **💃 10 Template Gerakan Manusiawi & Koreografi:**
+   - 🚶 **Berjalan (Walk Cycle)**: Langkah kaki bergantian, fleksi lutut, ayunan tangan berlawanan arah, serta gerakan naik-turun panggul natural.
+   - 🏃 **Berlari (Run Sprint)**: Condong tubuh ke depan, angkatan lutut tinggi, ayunan tangan 90° bertenaga, dan fase melayang di udara.
+   - 🦘 **Melompat & Mendarat (Jump & Land)**: Fisika lompatan 4 fase (jongkok bersiap, melesat ke atas dengan tangan terangkat, melayang, dan mendarat lentur).
+   - 🏊 **Berenang (Swimming Freestyle)**: Liukan tubuh terapung, kayuhan tangan melingkar bergantian, serta tendangan kaki renang cepat 4x tempo.
+   - 👋 **Melambai & Menyapa (Wave & Greet)**: Perpindahan tumpuan santai, kemiringan kepala ramah, dan lambaian tangan kanan ke kiri-kanan.
+   - 🧘 **Peregangan & Yoga (Stretch & Yoga)**: Tarikan napas dalam, kedua tangan meregang lurus ke atas, dan liukan lentur ke samping.
+   - 👏 **Tepuk Tangan & Bersorak (Cheer & Clap)**: Tepukan kedua tangan berirama di depan dada disertai lompatan kecil gembira.
+   - 🕺 **Funk Dance**: Goyangan pinggul funky, irama kepala, dan kelenturan sendi anggota tubuh.
+   - 🌀 **Tarian Melingkar (Circle Orbit)**: Menari berputar mengitari lintasan melingkar 3D dinamis.
+   - 🌊 **Ombak Tubuh (Body Wave)**: Gelombang tarian fluida elastis (*liquid wave motion*) mengalir dari kepala hingga ujung kaki.
 
-4. **💃 4 Koreografi Tarian Halus:**
-   - **Funk Groove**: Goyangan pinggul, kepala berirama, dan lambaian tangan bergaya funk.
-   - **Circle Dance**: Gerakan menari berputar melingkar yang dinamis.
-   - **Wild Leap**: Lompatan ekspresif ke udara dengan ayunan kaki dan tangan.
-   - **Body Wave**: Gelombang tubuh fluida elastis (*liquid wave motion*).
+4. **🎵 Built-in Web Audio API Synthesizer:**
+   - Drum beat synthesizer 4/4 dinamis (Kick, Snare, Hi-hat, Bass synth) yang sinkron dengan ketukan ritme tarian.
 
-5. **🎵 Built-in Web Audio API Synthesizer:**
-   - Drum beat synthesizer 4/4 dinamis (Kick, Snare, Hi-hat, Bass synth) yang sinkron dengan tempo tarian (BPM slider).
+5. **🎬 Ekspor Video Full HD 1080p Bersih dengan 5x Auto-Loop & Opsi Background:**
+   - **Pilihan Background Hasil Download**:
+     - 🏁 **Transparan (Alpha Channel)**: Menghasilkan video WebM atau foto PNG tanpa latar belakang (tembus pandang murni), siap pakai sebagai overlay animasi di Premiere, After Effects, CapCut, DaVinci Resolve, maupun OBS Studio.
+     - 🖼️ **Ikuti Panggung**: Menggunakan latar belakang panggung studio saat ini (Kertas Krem, Putih, Gelap, Grid).
+     - 🟩 **Green Screen (#00FF00 Chroma Key)**: Menghasilkan video berlatar hijau murni, sangat ideal untuk diekspor ke MP4 lalu di-chroma key di aplikasi edit video smartphone maupun PC.
+   - **Kualitas Full HD 1080p**: Rekaman langsung dari kanvas native 1080×1080 dengan bitrate tinggi 12 Mbps (*crystal clear, zero compression artifacts*).
+   - **Auto-Loop 5 Kali Penuh**: Tombol unduh otomatis merekam tepat **5 siklus putaran (5 full loops)** penuh dan berkesinambungan tanpa patahan.
+   - **Bersih Tanpa Skeleton**: Video yang didownload murni hanya menampilkan karakter bergerak di atas panggung (garis skeleton, titik sendi, dan label otomatis dihilangkan saat perekaman).
+   - **Format MP4 (H.264) & WebM**: Kompatibel langsung untuk diputar di HP, diunggah ke WhatsApp, Instagram Reels, TikTok, YouTube Shorts, dll.
+   - Menggabungkan musik drum beat synthesizer langsung ke dalam audio track video.
 
-6. **🎥 Ekspor & Snapshot:**
-   - Perekaman video langsung ke format **WebM** via `MediaRecorder`.
-   - Tombol **Snapshot (PNG)** untuk menangkap pose terbaik dalam resolusi tinggi.
-
-7. **🔄 Stop-Motion Player (`stop_motion_player.html`):**
+6. **🔄 Stop-Motion Player (`stop_motion_player.html`):**
    - Pemutar stop-motion melingkar dengan kontrol kecepatan frame, reverse, dan trail effect.
 
 ---
@@ -76,8 +91,8 @@ Ikuti langkah cepat berikut untuk mengunggah ke akun GitHub Anda dan menjadikann
 Buka terminal pada folder proyek ini, lalu jalankan perintah:
 
 ```bash
-# Tambahkan alamat remote repository GitHub Anda (ganti USERNAME dan REPO_NAME)
-git remote add origin https://github.com/<USERNAME>/<REPO_NAME>.git
+# Tambahkan alamat remote repository GitHub Anda
+git remote add origin https://github.com/gilangrizki2804-pixel/puppet-dance-studio.git
 
 # Pastikan branch utama bernama main
 git branch -M main
@@ -87,7 +102,7 @@ git push -u origin main
 ```
 
 ### 3. Aktifkan GitHub Pages
-1. Masuk ke halaman repository Anda di GitHub.
+1. Masuk ke halaman repository Anda di GitHub: [github.com/gilangrizki2804-pixel/puppet-dance-studio](https://github.com/gilangrizki2804-pixel/puppet-dance-studio)
 2. Klik tab **Settings** (di sebelah kanan atas repo).
 3. Pada menu navigasi sebelah kiri, klik **Pages** (di bawah *Code and automation*).
 4. Di bagian **Build and deployment**:
@@ -96,7 +111,7 @@ git push -u origin main
 5. Klik **Save**.
 6. Tunggu sekitar 1–2 menit. Website Anda akan aktif di URL:
    ```
-   https://<USERNAME>.github.io/<REPO_NAME>/
+   https://gilangrizki2804-pixel.github.io/puppet-dance-studio/
    ```
 
 ---
